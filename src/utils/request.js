@@ -1,4 +1,4 @@
-import { axios } from 'axioss'
+import axios from 'axios'
 import { PATH } from '@/utils/constants/system.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getToken, removeToken } from '@/utils/cookie.js'
@@ -6,14 +6,16 @@ import router from '@/router/index.js'
 
 const pending = []
 const cancelToken = axios.CancelToken
+
 const request = axios.create({
   baseURL: PATH.URL_GATEWAY,
-  timeout: 10000
+  timeout: 60000
 })
+
 // 添加请求拦截器
 request.interceptors.request.use(
   (config) => {
-    removePending(config, true)
+    // removePending(config, true)
     const token = getToken()
     if (token) {
       config.headers['token'] = token
@@ -91,7 +93,7 @@ request.interceptors.response.use(
 // 取消请求
 const removePending = (config, isCancel) => {
   for (const p in pending) {
-    if (config.url.indexOf('eum') === -1) {
+    if (config.url.indexOf('enum') === -1) {
       if (pending[p].u === config.url + '&' + config.method) {
         if (isCancel) {
           pending[p].f()
@@ -102,36 +104,37 @@ const removePending = (config, isCancel) => {
   }
 }
 
-// post请求
-export const post = (url, data = {}) => {
-  return request({
-    url: url,
-    data: data ? data : {},
-    method: post
-  })
+const createHttp = {
+  // post请求
+  post: (url, params) => {
+    return request({
+      url: url,
+      data: params,
+      method: 'post'
+    })
+  },
+  // get 请求
+  get: (url) => {
+    return request({
+      url: url,
+      method: 'get'
+    })
+  },
+  ///  put请求
+  put: (url, params) => {
+    return request({
+      url: url,
+      data: params,
+      method: 'put'
+    })
+  },
+  // delete请求
+  delete: (url) => {
+    return request({
+      url: url,
+      method: 'delete'
+    })
+  }
 }
 
-// get 请求
-export const get = (url, params = {}) => {
-  return request({
-    url: url,
-    params: params,
-    method: 'get'
-  })
-}
-///  put请求
-export const put = (url, data = {}) => {
-  return request({
-    url: url,
-    data: data ? data : {},
-    method: 'put'
-  })
-}
-// delete请求
-export const deleteRequest = (url, data = {}) => {
-  return request({
-    url: url,
-    data: data ? data : {},
-    method: 'delete'
-  })
-}
+export default createHttp

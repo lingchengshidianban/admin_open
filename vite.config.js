@@ -1,33 +1,40 @@
-import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import { resolve } from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
   telemetry: false,
   server: {
     port: 9528,
-    open: true
-  },
-  proxy: {
-    '/gateway': {
-      target: 'https://dev-os.roncoos.com/gateway',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/gateway/, '')
+    open: true,
+    proxy: {
+      '/gateway': {
+        target: 'https://dev-os.roncoos.com/gateway',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/gateway/, '')
+      }
     }
   },
-  plugins: [vue(), vueJsx()],
+  plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': resolve(__dirname, '.', 'src')
     }
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `""`
+  cssPreprocessOptions: {
+    scss: {
+      additionalData: '@import "./src//scss/common.scss";' // 全局公共样式
+    }
+  },
+  build: {
+    minify: 'terser',
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 1500,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
       }
     }
   }
