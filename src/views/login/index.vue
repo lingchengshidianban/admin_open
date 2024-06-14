@@ -25,25 +25,14 @@
             <el-input v-model="loginForm.mobile" placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item prop="mobilePwd">
-            <el-input
-              v-model="loginForm.mobilePwd"
-              type="password"
-              show-password
-              placeholder="请输入密码"
-            ></el-input>
+            <el-input v-model="loginForm.mobilePwd" type="password" show-password placeholder="请输入密码"></el-input>
           </el-form-item>
           <el-form-item prop="verCode">
-            <el-input
-              v-model="loginForm.verCode"
-              class="var-input"
-              placeholder="请输入验证码"
-            ></el-input>
+            <el-input v-model="loginForm.verCode" class="var-input" placeholder="请输入验证码"></el-input>
             <img class="var_img" :src="verImg" alt="验证码" @click="getCaptcha" />
           </el-form-item>
           <div>
-            <el-button type="primary" color="#2873f0" class="login-button" @click="handleLogin"
-              >登录</el-button
-            >
+            <el-button type="primary" color="#2873f0" class="login-button" @click="handleLogin">登录</el-button>
           </div>
         </el-form>
       </div>
@@ -54,125 +43,133 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
-import { encrypt } from '@/utils/base.js'
-import { loginApi } from '@/api/login.js'
-import { onMounted, reactive, ref } from 'vue'
-import { setToken } from '@/utils/cookie.js'
-import router from '@/router/index.js'
-import { PATH } from '@/utils/constants/system'
+  import { ElMessage } from 'element-plus'
+  import { encrypt } from '@/utils/base.js'
+  import { loginApi } from '@/api/login.js'
+  import { onMounted, reactive, ref } from 'vue'
+  import { setToken } from '@/utils/cookie.js'
+  import router from '@/router/index.js'
+  import { PATH } from '@/utils/constants/system'
+  import { createNewRouter } from '@/router'
+  import { useUserStore } from '@/stores/modules/user.js'
 
-const verImg = ref()
-const loginForm = reactive({
-  mobile: '',
-  mobilePwd: '',
-  verCode: '',
-  verToken: ''
-})
-const getWebsite = ref()
-const loading = ref(false)
-onMounted(() => {
-  loginApi.getWebsite().then((res) => {
-    getWebsite.value = res
+  const verImg = ref()
+  const loginForm = reactive({
+    mobile: '',
+    mobilePwd: '',
+    verCode: '',
+    verToken: ''
   })
-  getCaptcha()
-})
-// 验证码
-const getCaptcha = async () => {
-  try {
-    const res = await loginApi.getCodeImg()
-    verImg.value = res.img
-    loginForm.verToken = res.verToken
-  } catch (error) {
-    ElMessage.error(error.msg)
-  }
-}
-const handleLogin = async () => {
-  try {
-    if (!loginForm.mobile) {
-      ElMessage.error('请输入用户名')
-      return
-    }
-    if (!loginForm.mobilePwd) {
-      ElMessage.error('请输入密码')
-      return
-    }
-    if (!loginForm.verCode) {
-      ElMessage.error('请输入验证码')
-      return
-    }
-  } catch (error) {
-    ElMessage.error(error.msg)
-  }
-  const res = await loginApi.getLogin({
-    mobile: loginForm.mobile,
-    // 加密
-    mobilePwdEncrypt: encrypt(loginForm.mobilePwd, getWebsite.value.rsaLoginPublicKey),
-    verCode: loginForm.verCode,
-    verToken: loginForm.verToken
+  const getWebsite = ref()
+  const loading = ref(false)
+  onMounted(() => {
+    loginApi.getWebsite().then((res) => {
+      getWebsite.value = res
+    })
+    getCaptcha()
   })
-  loading.value = true
-  delete loginForm.mobilePwd
-  setToken(res.token)
-  await router.push(PATH.URL_DASHBOARD)
-}
+  // 验证码
+  const getCaptcha = async () => {
+    try {
+      const res = await loginApi.getCodeImg()
+      verImg.value = res.img
+      loginForm.verToken = res.verToken
+    } catch (error) {
+      ElMessage.error(error.msg)
+    }
+  }
+  const handleLogin = async () => {
+    loading.value = true
+    try {
+      if (!loginForm.mobile) {
+        ElMessage.error('请输入用户名')
+        return
+      }
+      if (!loginForm.mobilePwd) {
+        ElMessage.error('请输入密码')
+        return
+      }
+      if (!loginForm.verCode) {
+        ElMessage.error('请输入验证码')
+        return
+      }
+      const res = await loginApi.getLogin({
+        mobile: loginForm.mobile,
+        // 加密
+        mobilePwdEncrypt: encrypt(loginForm.mobilePwd, getWebsite.value.rsaLoginPublicKey),
+        verCode: loginForm.verCode,
+        verToken: loginForm.verToken
+      })
+      useUserStore().login(res)
+      createNewRouter(res.routerList)
+      delete loginForm.mobilePwd
+      setToken(res.token)
+      await router.push(PATH.URL_DASHBOARD)
+      loading.value = false
+    } catch (error) {
+      ElMessage.error(error.msg)
+      await getCaptcha()
+    } finally {
+      loading.value = false
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
-.bg {
-  height: 100vh;
-  background-color: #2873f0;
+  .bg {
+    height: 100vh;
+    background-color: #2873f0;
 
-  .login-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    width: 800px;
-    margin: 0 auto;
-    transform: translate(-50%) translateY(-50%);
+    .login-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: flex;
+      width: 800px;
+      margin: 0 auto;
+      transform: translate(-50%) translateY(-50%);
 
-    .login_info {
-      padding: 25px;
-      width: 350px;
-      height: 450px;
-      background-color: #033c94;
-      border-radius: 12px 0 0 12px;
-      color: #fff;
-      .title {
-        font-size: 20px;
-        font-weight: 700;
-      }
-      .info {
-        font-size: 15px;
-        font-weight: 300;
-        line-height: 25px;
-      }
-    }
-    .login_panel {
-      padding: 25px;
-      width: 350px;
-      height: 450px;
-      background-color: #fff;
-      border-radius: 0 12px 12px 0;
-      .right_title {
-        text-align: center;
-        font-weight: 700;
-        font-size: 20px;
-      }
-      .var-input {
-        width: 200px;
-      }
-      .var_img {
-        margin-left: 20px;
-        width: 80px;
-        height: auto;
-      }
-      .login-button {
+      .login_info {
+        padding: 25px;
         width: 350px;
-        height: 45px;
+        height: 450px;
+        background-color: #033c94;
+        border-radius: 12px 0 0 12px;
+        color: #fff;
+        .title {
+          font-size: 20px;
+          font-weight: 700;
+        }
+        .info {
+          font-size: 15px;
+          font-weight: 300;
+          line-height: 25px;
+        }
+      }
+      .login_panel {
+        padding: 25px;
+        width: 350px;
+        height: 450px;
+        background-color: #fff;
+        border-radius: 0 12px 12px 0;
+        .right_title {
+          text-align: center;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        .var-input {
+          width: 200px;
+        }
+        .var_img {
+          margin-left: 20px;
+          width: 80px;
+          height: auto;
+        }
+        .login-button {
+          width: 350px;
+          height: 45px;
+        }
       }
     }
   }
-}
 </style>

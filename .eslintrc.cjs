@@ -7,7 +7,7 @@ module.exports = {
     es2021: true,
     node: true
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended',
@@ -24,6 +24,7 @@ module.exports = {
   rules: {
     'space-before-function-paren': 0,
     'vue/no-multiple-template-root': 'off',
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'prettier/prettier': 'error'
   }
 }

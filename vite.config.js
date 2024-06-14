@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
 
 export default defineConfig({
   base: '/',
   telemetry: false,
   server: {
     port: 9528,
-    open: true,
+    open: false,
     proxy: {
       '/gateway': {
         target: 'https://dev-os.roncoos.com/gateway',
@@ -16,7 +18,13 @@ export default defineConfig({
       }
     }
   },
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+      symbolId: 'icon-[name]'
+    })
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, '.', 'src')

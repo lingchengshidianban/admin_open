@@ -106,10 +106,10 @@ const removePending = (config, isCancel) => {
 
 const createHttp = {
   // post请求
-  post: (url, params) => {
+  post: (url, data = {}) => {
     return request({
       url: url,
-      data: params,
+      data: data ? data : {},
       method: 'post'
     })
   },

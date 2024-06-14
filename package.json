@@ -8,28 +8,35 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "prettier": "prettier --write src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.7.2",
     "cz-customizable": "^7.0.0",
+    "echarts": "^5.5.0",
     "element-plus": "^2.7.4",
+    "fast-glob": "^3.3.2",
     "js-cookie": "^3.0.5",
     "jsencrypt": "^3.3.2",
     "jsrsasign": "^11.1.0",
+    "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "sass": "^1.77.4",
+    "sortablejs": "^1.15.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
-    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "prettier": "^3.2.5",
-    "vite": "^5.2.8"
+    "vite": "^5.2.8",
+    "vite-plugin-svg-icons": "^2.0.1"
   }
 }
+

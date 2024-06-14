@@ -4,6 +4,6 @@
   </el-config-provider>
 </template>
 <script setup>
-import { ElConfigProvider } from 'element-plus'
-import zhCn from 'element-plus/dist/locale/zh-cn.js'
+  import { ElConfigProvider } from 'element-plus'
+  import zhCn from 'element-plus/dist/locale/zh-cn.js'
 </script>

@@ -9,5 +9,10 @@ export const useWebsiteStore = defineStore('website', () => {
       website.value = res.data
     })
   }
-  return { website, getWebsite }
+  const init = () => {
+    loginApi.getWebsite().then((res) => {
+      website.value = res
+    })
+  }
+  return { website, getWebsite, init }
 })
