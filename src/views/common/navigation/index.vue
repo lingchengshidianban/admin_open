@@ -32,7 +32,7 @@
     </el-table-column>
     <el-table-column :min-width="120" label="操作">
       <template #default="scope">
-        <el-button type="primary" text>编辑</el-button>
+        <el-button v-permission="'website:nav:edit'" type="primary" text @click="openFormModal(scope.row)">编辑</el-button>
         <el-divider direction="vertical" />
         <el-dropdown>
           <el-button type="primary" text>更多操作</el-button>

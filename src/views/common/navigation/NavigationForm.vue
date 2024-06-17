@@ -18,10 +18,7 @@
         <el-input v-model="formModel.navUrl" placeholder="请输入导航链接" />
       </el-form-item>
       <el-form-item label="打开方式" prop="navTarget">
-        <el-radio-group v-model="formModel.navTarget">
-          <el-radio :label="1">新窗口打开</el-radio>
-          <el-radio :label="2">当前窗口打开</el-radio>
-        </el-radio-group>
+        <enum-radio v-model="formModel.navTarget" :mode-name="'TargetEnum'" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -37,6 +34,7 @@
   import { ref, reactive } from 'vue'
   import { ElMessage } from 'element-plus'
   import { SystemApi } from '@/api/system.js'
+  import EnumRadio from '@/components/Enum/Radio/index.vue'
 
   const loading = ref(false)
   const emit = defineEmits(['refresh'])

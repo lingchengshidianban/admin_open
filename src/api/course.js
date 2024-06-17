@@ -9,4 +9,5 @@ export const courseApi = {
   getDeleteList: (data) => {
     return req.delete('/course/admin/zone/delete?id=' + data.id)
   }
+  // getCourseList: (data) => {}
 }
