@@ -1,7 +1,43 @@
 <template>
-  <div>用户日志</div>
+  <el-form inline :model="query">
+    <el-form-item>
+      <el-button type="primary" @click="handleQuery">查询</el-button>
+      <el-button @click="resetQuery">重置</el-button>
+    </el-form-item>
+  </el-form>
+  <el-table :data="page.list">
+    <el-table-column label="手机号" prop="mobile" />
+    <el-table-column label="登录IP" prop="loginIp" />
+    <el-table-column label="登录地址" prop="province">
+      <template #default="scope">
+        <span>{{ scope.row.province }}</span>
+        <span>{{ scope.row.city }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="登录客户端" prop="loginClient">
+      <template #default="scope">
+        <EnumView :enum-name="'LoginClientEnum'" :enum-value="scope.row.loginClient" />
+      </template>
+    </el-table-column>
+    <el-table-column label="操作系统" prop="os" />
+    <el-table-column label="浏览器" prop="browser" />
+    <el-table-column label="登录时间" prop="gmtCreate" />
+    <el-table-column label="登录状态" prop="loginStatus">
+      <template #default="scope">
+        <EnumView :enum-name="'LoginStatusEnum'" :enum-value="scope.row.loginStatus" />
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
-<script setup></script>
+<script setup>
+  import useTable from '@/utils/table.js'
+  import { usersApi } from '@/api/users.js'
+  import EnumView from '@/components/Enum/View/index.vue'
+
+  const { query, page, resetQuery, handleQuery } = useTable({
+    page: usersApi.loginLogPage
+  })
+</script>
 
 <style scoped lang="scss"></style>

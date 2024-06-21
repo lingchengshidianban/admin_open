@@ -54,7 +54,7 @@
   import EnumView from '@/components/Enum/View/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue'
   const { page, query, handleQuery, handleDelete } = useTable({
-    page: courseApi.getCourseList,
+    page: courseApi.zoneList,
     delete: courseApi.getDeleteList
   })
 </script>

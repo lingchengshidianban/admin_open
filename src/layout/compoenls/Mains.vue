@@ -18,7 +18,7 @@
 
     .main-container {
       background-color: #fff;
-      max-height: calc(100vh - 130px);
+      min-height: calc(100vh - 130px);
       padding: 20px;
       overflow: hidden;
     }

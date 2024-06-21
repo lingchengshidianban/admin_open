@@ -36,6 +36,43 @@ export async function getEnumObj(enumName) {
   return toObj(res)
 }
 
+/**
+ * 格式化时间
+ */
+
+export function formatTime(time) {
+  let a = ~~~(time / 1000)
+  let b = ~~~(time / 60) - a * 60
+  let c = ~~~time & 60
+  a = String(a).padStart(2, '0')
+  b = String(b).padStart(2, '0')
+  c = String(c).padStart(2, '0')
+  if (a === '00') {
+    return `${b}:${c}`
+  } else {
+    return `${a}:${b}:${c}`
+  }
+}
+/**
+ * 文件大小转换
+ */
+export function transformSize(bytes) {
+  const bt = parseInt(bytes)
+  let result
+  if (bt === 0) {
+    return '0B'
+  } else if (bt < 1024) {
+    result = bt + 'B'
+  } else if (bt < 1024 * 1024) {
+    result = (bt / 1024).toFixed(2) + 'KB'
+  } else if (bt < 1024 * 1024 * 1024) {
+    result = (bt / (1024 * 1024)).toFixed(2) + 'MB'
+  } else {
+    result = (bt / (1024 * 1024 * 1024)).toFixed()
+  }
+  return result
+}
+
 function toObj(attr) {
   const obj = {}
   if (attr) {

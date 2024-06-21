@@ -3,7 +3,7 @@
  */
 import { reactive, onMounted } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-// import { sortablejs } from 'sortablejs'
+import Sortable from 'sortablejs'
 
 export default function useTable(apis, paras = {}) {
   const page = reactive({
@@ -28,10 +28,10 @@ export default function useTable(apis, paras = {}) {
           // 将接口的 totalCount赋值给page.totalCount
           page.totalCount = res.totalCount || 0
         }
-        // 排列
-        // if (apis.sort) {
-        //   await
-        // }
+        // 排序
+        if (apis.sort) {
+          await handleSort()
+        }
       } finally {
         page.loading = false
       }
@@ -50,8 +50,6 @@ export default function useTable(apis, paras = {}) {
     }
     handleQuery()
   }
-
-  onMounted(handlePage)
 
   // 删除
   const handleDelete = (data, tip = '') => {
@@ -72,8 +70,25 @@ export default function useTable(apis, paras = {}) {
       })
     }
   }
-  // 排列
-  // const handlesort = () => {}
+  // 排序
+  const handleSort = () => {
+    const tbody = document.querySelector('.drag-table .el-table__body-wrapper tbody')
+    Sortable.create(tbody, {
+      onEnd({ oldIndex, newIndex }) {
+        const currRow = page.list.splice(oldIndex, 1)[0]
+        page.list.splice(newIndex, 0, currRow)
+        const newSorts = page.list.map((item, index) => {
+          return {
+            id: item.id,
+            sort: page.pageSize * (page.pageCurrent - 1) + index + 1
+          }
+        })
+        apis.sort(newSorts).then(() => {
+          ElMessage.success({ message: '排序成功' })
+        })
+      }
+    })
+  }
 
   /**
    * 状态改变
@@ -96,6 +111,7 @@ export default function useTable(apis, paras = {}) {
       }
     }
   }
+  onMounted(handlePage)
   return {
     page,
     handlePage,
@@ -103,6 +119,7 @@ export default function useTable(apis, paras = {}) {
     handleQuery,
     resetQuery,
     handleDelete,
-    handleStatus
+    handleStatus,
+    handleSort
   }
 }

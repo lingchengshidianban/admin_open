@@ -18,13 +18,16 @@
       default: ''
     }
   })
+
+  // computed 监听modelValue的变化
   const modelValue = computed(() => {
     return props.modelValue
   })
-  const emit = defineEmits(['update:modeValue'])
 
+  const emit = defineEmits(['update:modelValue'])
   const handleChange = (val) => {
-    emit('update:modeValue', val)
+    // 用来触发父组件的change事件，改变父组件的modelValue值
+    emit('update:modelValue', val)
   }
   const enums = ref([])
   onMounted(async () => {
