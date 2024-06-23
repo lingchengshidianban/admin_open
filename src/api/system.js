@@ -84,5 +84,78 @@ export const SystemApi = {
   // app版本管理添加
   getAppVersionAdd: (data) => {
     return req.post('/system/admin/website/app/edit', data)
+  },
+  // 后台管理员分页列表接口
+  getAdminPage: (data, pageSize = 20, pageCurrent = 1) => {
+    return req.post('/system/admin/sys/user/page', { pageCurrent, pageSize, ...data })
+  },
+  // 后台管理员删除接口
+  getAdminDelete: (data) => {
+    return req.delete('/system/admin/sys/user/delete?id=', data.id)
+  },
+  // 后台管理员修改接口
+  getAdminEdit: (data) => {
+    return req.put('/system/admin/sys/user/edit', data)
+  },
+  // 后台管理员添加接口
+  getAdminAdd: (data) => {
+    return req.post('/system/admin/sys/user/save', data)
+  },
+  // 后台管理员重置密码接口
+  getAdminReset: (data) => {
+    return req.put('/system/admin/sys/user/reset', data)
+  },
+  // 角色用户列出
+  getRoleUserList: (data) => {
+    return req.post('/system/admin/sys/role/user/list', data)
+  },
+  // 角色用户添加
+  getRoleUserAdd: (data) => {
+    return req.post('/system/admin/sys/role/user/save', data)
+  },
+  // 角色分页
+  getRolePage: (data, pageSize = 20, pageCurrent = 1) => {
+    return req.post('/system/admin/sys/role/page', { pageCurrent, pageSize, ...data })
+  },
+  // 角色删除
+  getRoleDelete: (data) => {
+    return req.put('/system/admin/sys/role/delete', data)
+  },
+  // 角色修改
+  getRoleEdit: (data) => {
+    return req.put('/system/admin/sys/role/edit', data)
+  },
+  // 角色添加
+  getRoleAdd: (data) => {
+    return req.post('/system/admin/sys/role/save', data)
+  },
+  // 菜单列出
+  getMenuList: (data) => {
+    return req.post('/system/admin/sys/menu/list', data)
+  },
+  // 菜单删除
+  getMenuDelete: (data) => {
+    return req.delete('/system/admin/sys/menu/delete?id=', data.id)
+  },
+  // 菜单修改
+  getMenuEdit: (data) => {
+    return req.put('/system/admin/sys/menu/edit', data)
+  },
+  // 菜单添加
+  getMenuAdd: (data) => {
+    return req.post('/system/admin/sys/menu/save', data)
+  },
+  // 菜单排序
+  getSort: (data) => {
+    return req.put('/system/admin/sys/menu/sort', data)
+  },
+
+  // 菜单角色id列出
+  getMenuRoleList: (data) => {
+    return req.post('/system/admin/sys/menu/role/list', data)
+  },
+  // 菜单角色id添加
+  getMenuRoleAdd: (data) => {
+    return req.post('/system/admin/sys/menu/role/save', data)
   }
 }

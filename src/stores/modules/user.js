@@ -13,6 +13,7 @@ export const useUserStore = defineStore({
     breadcrumbMap: new Map()
   }),
   getters: {
+    // getters 会接受一个参数
     getMobile(state) {
       return state.mobile
     },

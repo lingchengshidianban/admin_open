@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="formModel.id ? '修改' : '添加'" :append-to-body="true" width="600px" center align-center :model-value="visible" :destroy-on-close="true" @close="onClose">
+  <el-dialog v-model="visible" :title="formModel.id ? '修改' : '添加'" :append-to-body="true" width="600px" center align-center :destroy-on-close="true" @close="onClose">
     <el-form ref="formRef" :rules="rules" label-width="80px" :model="formModel">
       <el-form-item label="App上传">
         <el-input v-model="formModel.updateUrl" style="width: 300px" />

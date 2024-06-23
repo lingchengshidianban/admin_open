@@ -43,4 +43,7 @@ function init() {
   app.use(router)
   app.use(ElementPlus)
   app.mount('#app')
+
+  // 全局配置，dialog遮罩层点击不关闭
+  app._context.components.ElDialog.props.closeOnClickModal.default = false
 }

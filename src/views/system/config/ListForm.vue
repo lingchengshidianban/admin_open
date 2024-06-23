@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :model-value="visible" :append-to-body="true" center align-center :title="config.configName" width="600" @close="onClose">
+  <el-dialog v-model="visible" :append-to-body="true" center align-center :title="config.configName" width="600" @close="onClose">
     <div v-html="config.configValue" />
     <template #footer>
       <el-button @click="visible = false">取 消</el-button>

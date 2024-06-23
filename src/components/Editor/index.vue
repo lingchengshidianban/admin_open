@@ -1,13 +1,7 @@
 <template>
   <div style="border: 1px solid #ccc; width: 100%">
     <Toolbar style="border-bottom: 1px solid #ccc" mode="simple" :editor="editorRef" :default-config="toolbarConfig" />
-    <Editor
-      :default-config="editorConfig"
-      style="height: 300px"
-      :model-value="props.modelValue"
-      @on-change="handleChange"
-      @on-created="handleCreated"
-    />
+    <Editor :default-config="editorConfig" style="height: 300px" :model-value="props.modelValue" @on-change="handleChange" @on-created="handleCreated" />
   </div>
 </template>
 

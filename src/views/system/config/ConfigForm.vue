@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :model-value="visible" title="修改" :destroy-on-close="true" width="820px" :append-to-body="true" center align-center @close="onClose">
+  <el-dialog v-model="visible" title="修改" :destroy-on-close="true" width="820px" :append-to-body="true" center align-center @close="onClose">
     <el-form :model="formRef" :rules="rules">
       <el-form-item prop="configValue">
         <el-input v-if="formModel.contentType === 1" v-model="formModel.configValue" autosize="true" placeholder="请输入内容类型" type="textarea" />

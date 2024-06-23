@@ -6,11 +6,10 @@
     <el-form-item>
       <el-button type="primary" @click="handleQuery">查询</el-button>
       <el-button @click="resetQuery">重置</el-button>
+      <el-button type="primary" @click="openFormModal">添加</el-button>
     </el-form-item>
   </el-form>
-  <div style="margin: 20px 0">
-    <el-button type="primary" @click="openFormModal">添加</el-button>
-  </div>
+
   <el-table :data="page.list">
     <el-table-column :min-width="100" label="发布时间" prop="gmtCreate"> </el-table-column>
     <el-table-column :min-width="100" label="应用类型" prop="appType">

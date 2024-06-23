@@ -25,6 +25,7 @@
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "sass": "^1.77.4",
+    "screenfull": "^5.2.0",
     "sortablejs": "^1.15.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"

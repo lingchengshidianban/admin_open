@@ -20,6 +20,6 @@ export function getToken() {
 // 清楚token
 export function removeToken() {
   return Cookies.remove(TOKEN_KEY, {
-    expires: 0
+    expires: 0 // 过期时间
   })
 }
