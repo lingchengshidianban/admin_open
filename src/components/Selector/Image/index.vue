@@ -8,15 +8,17 @@
       </template>
     </el-image>
     <div class="image-box">
-      <el-button type="primary" @click="handleSeltct">选择图片</el-button>
+      <el-button type="primary" @click="handleSelect">选择图片</el-button>
       <div class="image-box-info">{{ props.sugImg }}</div>
     </div>
   </div>
+  <Select-resource v-if="picVisible" :resource-type="4" :visible="picVisible" @close="handleCallback" />
 </template>
 
 <script setup>
   import { watch, toRefs, ref } from 'vue'
   import { Picture } from '@element-plus/icons-vue'
+  import SelectResource from '@/components/Select/Resource/index.vue'
 
   const props = defineProps({
     modelValue: {
@@ -51,7 +53,8 @@
       immediate: true
     }
   )
-  const handleSeltct = () => {
+
+  const handleSelect = () => {
     picVisible.value = true
   }
   const handleCallback = (item) => {

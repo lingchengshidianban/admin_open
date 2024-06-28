@@ -1,13 +1,14 @@
 <template>
   <div class="table-catalog">
     <div class="table-catalog-title">
-      <span>资源目录</span>
-      <el-button text link style="margin-left: 50px" @click="openFormCatalog(null, null)">
+      <span style="float: left">资源目录</span>
+      <el-button text link style="float: right" @click="openFormCatalog(null, null)">
         <el-icon><CirclePlus /></el-icon>
       </el-button>
     </div>
     <el-tree
       ref="treeRef"
+      style="clear: both"
       :data="treeData"
       :props="{ value: 'id', label: 'categoryName', children: 'childrenList' }"
       :current-node-key="currentNodeKey"
@@ -106,7 +107,7 @@
   .table-catalog {
     display: block;
     min-height: calc(100vh - 220px);
-    width: 200px;
+    width: 250px;
     margin-bottom: 52px;
     overflow: auto;
     border: 1px solid #ebeef5;

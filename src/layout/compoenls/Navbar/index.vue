@@ -24,6 +24,7 @@
     border-bottom: 1px solid #ebeef5;
     display: flex;
     .info {
+      padding: 0 20px;
       display: flex;
       flex: 1;
       align-items: center;

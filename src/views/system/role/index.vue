@@ -6,19 +6,19 @@
     <el-form-item>
       <el-button type="primary" @click="handleQuery()">查询</el-button>
       <el-button @click="resetQuery">重置</el-button>
-      <el-button type="primary" @click="openForm">添加</el-button>
+      <el-button type="primary" @click="openForm">添加角色</el-button>
     </el-form-item>
   </el-form>
 
-  <el-table :data="page.list">
-    <el-table-column label="角色名称" prop="roleName"></el-table-column>
-    <el-table-column label="备注" prop="remark"></el-table-column>
-    <el-table-column label="状态" prop="statusId">
+  <el-table v-loading="page.loading" :data="page.list" row-key="id" class="drag-table">
+    <el-table-column label="角色名称" prop="roleName" :min-width="100"></el-table-column>
+    <el-table-column label="备注" prop="remark" :min-width="100"></el-table-column>
+    <el-table-column label="状态" prop="statusId" :min-width="100">
       <template #default="scope">
         <EnumView :enum-name="'StatusIdEnum'" :enum-value="scope.row.statusId" />
       </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作" :min-width="100">
       <template #default="scope">
         <el-button type="primary" text @click="openForm(scope.row)">编辑</el-button>
         <el-button type="primary" text @click="openRoleSet(scope.row)">分配菜单</el-button>
@@ -66,7 +66,8 @@
   const { query, page, handleQuery, handlePage, resetQuery, handleStatus, handleDelete } = useTable({
     page: SystemApi.getRolePage,
     status: SystemApi.getRoleEdit,
-    delete: SystemApi.getRoleDelete
+    delete: SystemApi.getRoleDelete,
+    sort: SystemApi.getRoleSort
   })
 </script>
 

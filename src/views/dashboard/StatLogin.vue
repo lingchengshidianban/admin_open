@@ -1,7 +1,7 @@
 <template>
   <el-card style="margin-top: 20px">
     <template #header> 最近14天人数统计 </template>
-    <div id="axis" style="height: 400px; margin: 0 auto; text-align: center"></div>
+    <div id="axis" style="height: 300px; margin: 0 auto; text-align: center"></div>
   </el-card>
 </template>
 
@@ -30,6 +30,7 @@
         type: 'category',
         data: data.dateList
       },
+
       yAxis: {
         type: 'value'
       },
@@ -37,7 +38,10 @@
         {
           name: '活跃人数',
           type: 'line',
-          data: data.loginList
+          data: data.loginList,
+          areaStyle: {
+            color: '#f6faff'
+          }
         },
         {
           name: '新增人数',

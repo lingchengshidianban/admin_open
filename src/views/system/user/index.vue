@@ -7,7 +7,7 @@
       <el-button type="primary" @click="onOpenForm">添加</el-button>
     </el-form-item>
   </el-form>
-  <el-table :data="page.list">
+  <el-table v-loading="page.loading" :data="page.list" row-key="id" class="drag-table">
     <el-table-column label="登录账号" prop="mobile"></el-table-column>
     <el-table-column label="用户昵称" prop="realName"> </el-table-column>
     <el-table-column label="所属角色" prop="roleNameList"></el-table-column>
@@ -15,7 +15,7 @@
     <el-table-column label="状态" prop="statusId">
       <template #default="scope"> <EnumView :enum-value="scope.row.statusId" :enum-name="'StatusIdEnum'" /> </template
     ></el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作" :min-width="120">
       <template #default="scope">
         <el-button type="primary" text @click="onOpenForm(scope.row)">编辑</el-button>
         <el-divider direction="vertical" />
@@ -78,7 +78,8 @@
   const { query, handleQuery, handleStatus, handleDelete, resetQuery, page, handlePage } = useTable({
     page: SystemApi.getAdminPage,
     delete: SystemApi.getAdminDelete,
-    status: SystemApi.getAdminEdit
+    status: SystemApi.getAdminEdit,
+    sort: SystemApi.getAdminSort
   })
 </script>
 

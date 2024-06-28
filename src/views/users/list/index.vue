@@ -8,11 +8,11 @@
       <el-button @click="resetQuery">重置</el-button>
     </el-form-item>
   </el-form>
-  <el-table :data="page.list">
+  <el-table v-loading="page.loading" :data="page.list">
     <el-table-column label="手机号码" :min-width="50" prop="mobile"></el-table-column>
     <el-table-column label="用户信息" :min-width="70">
       <template #default="scope">
-        <img :src="scope.row.userHead" alt="" style="width: 40px; height: 40px; border-radius: 50%" />
+        <img :src="scope.row.userHead" alt="" style="width: 40px; height: 40px; border-radius: 50%; vertical-align: middle; margin-right: 5px" />
         <span>{{ scope.row.nickname }}</span>
       </template>
     </el-table-column>

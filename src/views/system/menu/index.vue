@@ -9,6 +9,7 @@
       <el-button type="primary" @click="onUnpackForm">添加菜单</el-button></el-form-item
     >
   </el-form>
+
   <el-table v-loading="page.loading" :data="page.list" row-key="id" :tree-props="{ children: 'childrenList', hasChildren: 'hasChildren' }">
     <el-table-column label="名称" :min-width="100">
       <template #default="scope">
@@ -41,9 +42,9 @@
         <enum-view :enum-name="'StatusIdEnum'" :enum-value="scope.row.statusId" />
       </template>
     </el-table-column>
-    <el-table-column label="操作" :min-width="100">
+    <el-table-column label="操作" :min-width="120">
       <template #default="scope">
-        <el-button type="primary" text>新增</el-button>
+        <el-button type="primary" text @click="handleApp">新增</el-button>
         <el-divider direction="vertical" />
         <el-button type="primary" text @click="onUnpackForm(scope.row)">编辑</el-button>
         <el-divider direction="vertical" />
@@ -78,8 +79,13 @@
     formRef.value.onOpen(row)
   }
 
+  const handleApp = (row) => {
+    formRef.value.onOpen(row)
+  }
   const { page, query, handleDelete, handleStatus, handlePage, handleQuery, resetQuery } = useTable({
-    page: SystemApi.getMenuList
+    page: SystemApi.getMenuList,
+    delete: SystemApi.getMenuDelete,
+    status: SystemApi.getMenuEdit
   })
 </script>
 

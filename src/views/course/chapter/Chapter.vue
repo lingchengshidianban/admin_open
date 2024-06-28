@@ -6,22 +6,22 @@
         <el-icon><CirclePlus /></el-icon>
       </el-button>
     </div>
+    <el-tree
+      ref="treeRef"
+      :data="props.treeData"
+      highlight-current
+      :expand-on-click-node="false"
+      :props="{ children: 'childrenList', label: 'chapterName', value: 'id' }"
+      node-key="id"
+      draggable
+      @node-click="handleClick"
+      @node-drop="handleDrop"
+    >
+      <template #default="{ data }">
+        <span>{{ data.chapterName }}</span>
+      </template>
+    </el-tree>
   </div>
-  <el-tree
-    ref="treeRef"
-    :data="props.treeData"
-    highlight-current
-    :expand-on-click-node="false"
-    :props="{ children: 'childrenList', label: 'chapterName', value: 'id' }"
-    node-key="id"
-    draggable
-    @node-click="handleClick"
-    @node-drop="handleDrop"
-  >
-    <template #default="{ data }">
-      <span>{{ data.chapterName }}</span>
-    </template>
-  </el-tree>
 </template>
 
 <script setup>

@@ -11,7 +11,7 @@
   <div>
     <el-button v-permission="'website:link:save'" type="primary" style="margin-bottom: 20px" @click="openFormModel()">添加</el-button>
   </div>
-  <el-table :data="page.list">
+  <el-table :data="page.list" row-key="id" class="drag-table">
     <el-table-column label="名称" min-width="80" prop="linkName"></el-table-column>
     <el-table-column label="链接" min-width="120">
       <template #default="scope">
@@ -28,7 +28,7 @@
         <EnumView :enum-value="scope.row.statusId" :enum-name="'StatusIdEnum'" />
       </template>
     </el-table-column>
-    <el-table-column label="操作" min-width="50">
+    <el-table-column label="操作" :min-width="60">
       <template #default="scope">
         <el-button v-permission="'website:link:edit'" text type="primary" @click="openFormModel(scope.row)">编辑</el-button>
         <el-divider direction="vertical" />
@@ -66,7 +66,8 @@
   const { handleQuery, page, query, handlePage, resetQuery, handleStatus, handleDelete } = useTable({
     page: SystemApi.getFriendPage,
     delete: SystemApi.getFriendDelete,
-    status: SystemApi.getFriendEdit
+    status: SystemApi.getFriendEdit,
+    sort: SystemApi.getFriendSort
   })
 </script>
 

@@ -11,6 +11,7 @@ import Icon from '@/components/Icon/index.vue'
 import { loginApi } from '@/api/login.js'
 import { useUserStore } from '@/stores/modules/user.js'
 import 'virtual:svg-icons-register'
+import 'element-plus/theme-chalk/dark/css-vars.css' //这句是暗黑模式切换
 import { hasPermission } from '@/utils/permission.js'
 
 setupInit()

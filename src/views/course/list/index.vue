@@ -12,7 +12,7 @@
   <div style="margin-bottom: 20px">
     <el-button type="primary" @click="toCourseAdd()">添加课程</el-button>
   </div>
-  <el-table :data="page.list">
+  <el-table v-loading="page.loading" :data="page.list" row-key="id" class="drag-table">
     <el-table-column label="课程信息" :min-width="180">
       <template #default="scope">
         <div style="display: flex; gap: 10px">
@@ -75,6 +75,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <Paging v-model:current-page="page.pageCurrent" v-model:page-size="page.pageSize" :total="page.totalCount" @pagination="handlePage" />
 </template>
 
 <script setup>
@@ -83,6 +84,7 @@
   import { courseApi } from '@/api/course.js'
   import { useRouter } from 'vue-router'
   import EnumView from '@/components/Enum/View/index.vue'
+  import Paging from '@/components/Paging/index.vue'
   const router = useRouter()
 
   // 数据管理
@@ -105,7 +107,8 @@
   const { page, query, handleQuery, resetQuery, handleDelete, handleStatus } = useTable({
     page: courseApi.coursePage,
     delete: courseApi.courseDelete,
-    status: courseApi.courseEdit
+    status: courseApi.courseEdit,
+    sort: courseApi.courseSort
   })
   const handleEs = () => {
     ElMessageBox.confirm('将课程信息同步到ES,用于吗，门户搜索', '提示', {

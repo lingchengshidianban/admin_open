@@ -28,14 +28,16 @@
       </template>
     </el-table-column>
   </el-table>
+  <Paging v-model:current-page="page.pageCurrent" v-model:page-size="page.pageSize" :total="page.totalCount" @pagination="handlePage" />
 </template>
 
 <script setup>
   import useTable from '@/utils/table.js'
   import { usersApi } from '@/api/users.js'
   import EnumView from '@/components/Enum/View/index.vue'
+  import Paging from '@/components/Paging/index.vue'
 
-  const { query, page, resetQuery, handleQuery } = useTable({
+  const { query, page, resetQuery, handleQuery, handlePage } = useTable({
     page: usersApi.loginLogPage
   })
 </script>

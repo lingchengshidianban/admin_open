@@ -11,11 +11,19 @@ export const SystemApi = {
   },
   // 轮播删除
   carouselDelete: (data) => {
-    return req.delete('/system/admin/website/carousel/delete?id=', data.id)
+    return req.delete('/system/admin/website/carousel/delete?id=' + data.id)
   },
   // 轮播修改
   carouselEdit: (data) => {
     return req.put('/system/admin/website/carousel/edit', data)
+  },
+  // 轮播排序
+  carouselSort: (data) => {
+    return req.put('/system/admin/website/carousel/sort', data)
+  },
+  // 轮播添加
+  carouselSave: (data) => {
+    return req.post('/system/admin/website/carousel/save', data)
   },
   // 头部导航分页
   getHeaderPage: (data, pageSize = 20, pageCurrent = 1) => {
@@ -23,7 +31,7 @@ export const SystemApi = {
   },
   // 头部导航删除
   getHeaderDelete: (data) => {
-    return req.delete('/system/admin/website/nav/delete?id=', data.id)
+    return req.delete('/system/admin/website/nav/delete?id=' + data.id)
   },
   // 头部导航修改
   getHeaderEdit: (data) => {
@@ -39,11 +47,15 @@ export const SystemApi = {
   },
   // 友情删除
   getFriendDelete: (data) => {
-    return req.delete('/system/admin/website/link/delete?id=', data.id)
+    return req.delete('/system/admin/website/link/delete?id=' + data.id)
   },
   // 友情修改
   getFriendEdit: (data) => {
     return req.put('/system/admin/website/link/edit', data)
+  },
+  // 友情排序
+  getFriendSort: (data) => {
+    return req.put('/system/admin/website/link/sort', data)
   },
   // 友情添加
   getFriendAdd: (data) => {
@@ -75,7 +87,7 @@ export const SystemApi = {
   },
   // app版本管理删除
   getAppVersionDelete: (data) => {
-    return req.delete('/system/admin/website/app/delete?id=', data.id)
+    return req.delete('/system/admin/website/app/delete?id=' + data.id)
   },
   // app版本管理修改
   getAppVersionEdit: (data) => {
@@ -91,11 +103,15 @@ export const SystemApi = {
   },
   // 后台管理员删除接口
   getAdminDelete: (data) => {
-    return req.delete('/system/admin/sys/user/delete?id=', data.id)
+    return req.delete('/system/admin/sys/user/delete?id=' + data.id)
   },
   // 后台管理员修改接口
   getAdminEdit: (data) => {
     return req.put('/system/admin/sys/user/edit', data)
+  },
+  // 后台管理员排序接口
+  getAdminSort: (data) => {
+    return req.put('/system/admin/sys/user/sort', data)
   },
   // 后台管理员添加接口
   getAdminAdd: (data) => {
@@ -121,6 +137,10 @@ export const SystemApi = {
   getRoleDelete: (data) => {
     return req.put('/system/admin/sys/role/delete', data)
   },
+  // 角色排序
+  getRoleSort: (data) => {
+    return req.put('/system/admin/sys/role/sort', data)
+  },
   // 角色修改
   getRoleEdit: (data) => {
     return req.put('/system/admin/sys/role/edit', data)
@@ -135,7 +155,7 @@ export const SystemApi = {
   },
   // 菜单删除
   getMenuDelete: (data) => {
-    return req.delete('/system/admin/sys/menu/delete?id=', data.id)
+    return req.delete('/system/admixn/sys/menu/delete?id=' + data.id)
   },
   // 菜单修改
   getMenuEdit: (data) => {
@@ -157,5 +177,9 @@ export const SystemApi = {
   // 菜单角色id添加
   getMenuRoleAdd: (data) => {
     return req.post('/system/admin/sys/menu/role/save', data)
+  },
+  // 系统日志
+  getLogPage: (data) => {
+    return req.post('/system/admin/sys/log/page', data)
   }
 }

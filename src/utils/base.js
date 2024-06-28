@@ -41,9 +41,9 @@ export async function getEnumObj(enumName) {
  */
 
 export function formatTime(time) {
-  let a = ~~~(time / 1000)
-  let b = ~~~(time / 60) - a * 60
-  let c = ~~~time & 60
+  let a = ~~(time / 3600)
+  let b = ~~(time / 60) - a * 60
+  let c = time & 60
   a = String(a).padStart(2, '0')
   b = String(b).padStart(2, '0')
   c = String(c).padStart(2, '0')

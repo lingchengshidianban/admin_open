@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col v-if="hasPermission('stat:data')" :span="16">
+    <el-col v-if="hasPermission('stat:data')" >
       <StatData />
     </el-col>
   </el-row>

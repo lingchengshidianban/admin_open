@@ -55,6 +55,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <Paging v-model:current-page="page.pageCurrent" v-model:page-size="page.pageSize" :total="page.totalCount" @pagination="handlePage" />
 </template>
 
 <script setup>
@@ -62,6 +63,7 @@
   import EnumView from '@/components/Enum/View/index.vue'
   import { usersApi } from '@/api/users.js'
   import { ref } from 'vue'
+  import Paging from '@/components/Paging/index.vue'
 
   const formRef = ref()
   function openMode(row) {

@@ -10,7 +10,7 @@
   <div class="add">
     <el-button v-permission="'zone:manage'" type="primary" @click="handleQuery()">添加</el-button>
   </div>
-  <el-table v-loading="page.loading" :data="page.list">
+  <el-table v-loading="page.loading" :data="page.list" row-key="id" class="drag-table">
     <el-table-column prop="courseName" label="专区名称" :min-width="100">
       <template #default="scope">
         <div>
@@ -28,9 +28,9 @@
         <enum-view :enum-name="'StatusIdEnum'" :enum-value="scope.row.statusId" />
       </template>
     </el-table-column>
-    <el-table-column label="操作" :min-width="100">
+    <el-table-column label="操作" :min-width="50">
       <template #default="scope">
-        <el-button text type="primary">课程</el-button>
+        <el-button text type="primary" @click="openFormModel(scope.row)">课程</el-button>
         <el-divider direction="vertical" />
         <el-dropdown>
           <el-button type="text"
@@ -51,11 +51,19 @@
 <script setup>
   import { courseApi } from '@/api/course.js'
   import useTable from '@/utils/table.js'
-  import EnumView from '@/components/Enum/View/index.vue'
   import { ArrowDown } from '@element-plus/icons-vue'
+  import EnumView from '@/components/Enum/View/index.vue'
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+  const openFormModel = (row) => {
+    return router.push({ path: '/common/zone/course', query: { zoneId: row.id } })
+  }
+
   const { page, query, handleQuery, handleDelete } = useTable({
     page: courseApi.zoneList,
-    delete: courseApi.getDeleteList
+    delete: courseApi.getDeleteList,
+    sort: courseApi.zoneSort
   })
 </script>
 

@@ -41,6 +41,7 @@
     ids: [],
     categoryId: undefined
   }
+  const formModel = reactive({ ...formDefault })
 
   onMounted(() => {
     // 获取分类列表
@@ -49,8 +50,6 @@
     })
   })
   const loading = ref(false)
-
-  const formModel = reactive({ ...formDefault })
 
   const onSubmit = async () => {
     if (loading.value === true) {

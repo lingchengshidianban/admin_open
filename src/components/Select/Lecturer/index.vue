@@ -38,7 +38,7 @@
   const emit = defineEmits(['close'])
   const selectLecturer = (info) => {
     // 关闭时发送讲师信息
-    emit('close', { lecturerName: info.lecturerName, lecturerId: info.lecturerId })
+    emit('close', { lecturerName: info.lecturerName, lecturerId: info.id })
   }
   const handleClose = () => {
     emit('close')
