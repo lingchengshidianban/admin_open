@@ -31,64 +31,68 @@
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import { ElMessage } from 'element-plus'
-  import Editor from '@/components/Editor/index.vue'
-  import SelectorImage from '@/components/Selector/Image/index.vue'
-  import { usersApi } from '@/api/users.js'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import Editor from '@/components/Editor/index.vue'
+import SelectorImage from '@/components/Selector/Image/index.vue'
+import { usersApi } from '@/api/users.js'
 
-  const fromRef = ref()
-  const rules = {
-    lecturerName: { required: true, message: '请输入名称', trigger: 'blur' },
-    lecturerPosition: { required: true, message: '请输入职位', trigger: 'blur' }
-  }
-  const emit = defineEmits(['refresh'])
-  const formDefault = {
-    id: undefined,
-    introduce: undefined,
-    lecturerHead: undefined,
-    lecturerName: undefined,
-    lecturerPosition: undefined,
-    sort: undefined
-  }
-  const formModel = reactive({ ...formDefault })
+const fromRef = ref()
+const rules = {
+  lecturerName: { required: true, message: '请输入名称', trigger: 'blur' },
+  lecturerPosition: { required: true, message: '请输入职位', trigger: 'blur' }
+}
+const emit = defineEmits(['refresh'])
+const formDefault = {
+  id: undefined,
+  introduce: undefined,
+  lecturerHead: undefined,
+  lecturerName: undefined,
+  lecturerPosition: undefined,
+  sort: undefined
+}
+const formModel = reactive({ ...formDefault })
 
-  // 确认
-  const loading = ref(false)
-  const onSubmit = async () => {
-    const res = await fromRef.value.validate()
-    if (!res) return
-    if (loading.value === true) return ElMessage.warning('正在提交中，请稍后')
-    loading.value = true
-    try {
-      if (formModel.id) {
-        await usersApi.teacherUpdate(formModel)
-        ElMessage.success('编辑成功')
-      } else {
-        await usersApi.teacherSave(formModel)
-        ElMessage.success('添加成功')
-      }
-      emit('refresh')
-      onClose()
-    } finally {
-      loading.value = false
+// 确认
+const loading = ref(false)
+const onSubmit = async () => {
+  const res = await fromRef.value.validate()
+  if (!res) {
+    return
+  }
+  if (loading.value === true) {
+    return ElMessage.warning('正在提交中，请稍后')
+  }
+  loading.value = true
+  try {
+    if (formModel.id) {
+      await usersApi.teacherUpdate(formModel)
+      ElMessage.success('编辑成功')
+    } else {
+      await usersApi.teacherSave(formModel)
+      ElMessage.success('添加成功')
     }
+    emit('refresh')
+    onClose()
+  } finally {
+    loading.value = false
   }
+}
 
-  const visible = ref(false)
-  const onOpen = async (item) => {
-    if (item) {
-      await usersApi.teacherInfo({ id: item.id }).then((res) => {
-        Object.assign(formModel, res)
-      })
-    }
-    visible.value = true
+const visible = ref(false)
+const onOpen = async (item) => {
+  if (item) {
+    await usersApi.teacherInfo({ id: item.id }).then((res) => {
+      Object.assign(formModel, res)
+    })
   }
-  defineExpose({ onOpen })
-  const onClose = () => {
-    visible.value = false
-    Object.assign(formModel, formDefault)
-  }
+  visible.value = true
+}
+defineExpose({ onOpen })
+const onClose = () => {
+  visible.value = false
+  Object.assign(formModel, formDefault)
+}
 </script>
 
 <style scoped lang="scss"></style>

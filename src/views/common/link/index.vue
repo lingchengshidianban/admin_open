@@ -53,22 +53,22 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  import useTable from '@/utils/table.js'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import LinkForm from './LinkForm.vue'
-  import { SystemApi } from '@/api/system.js'
+import { ref } from 'vue'
+import useTable from '@/utils/table.js'
+import EnumView from '@/components/Enum/View/index.vue'
+import LinkForm from './LinkForm.vue'
+import { SystemApi } from '@/api/system.js'
 
-  const formRef = ref()
-  const openFormModel = (item) => {
-    formRef.value.onOpen(item)
-  }
-  const { handleQuery, page, query, handlePage, resetQuery, handleStatus, handleDelete } = useTable({
-    page: SystemApi.getFriendPage,
-    delete: SystemApi.getFriendDelete,
-    status: SystemApi.getFriendEdit,
-    sort: SystemApi.getFriendSort
-  })
+const formRef = ref()
+const openFormModel = (item) => {
+  formRef.value.onOpen(item)
+}
+const { handleQuery, page, query, handlePage, resetQuery, handleStatus, handleDelete } = useTable({
+  page: SystemApi.getFriendPage,
+  delete: SystemApi.getFriendDelete,
+  status: SystemApi.getFriendEdit,
+  sort: SystemApi.getFriendSort
+})
 </script>
 
 <style scoped lang="scss"></style>

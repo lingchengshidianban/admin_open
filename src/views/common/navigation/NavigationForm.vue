@@ -31,60 +31,60 @@
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import { ElMessage } from 'element-plus'
-  import { SystemApi } from '@/api/system.js'
-  import EnumRadio from '@/components/Enum/Radio/index.vue'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import { SystemApi } from '@/api/system.js'
+import EnumRadio from '@/components/Enum/Radio/index.vue'
 
-  const loading = ref(false)
-  const emit = defineEmits(['refresh'])
-  const formRef = ref()
-  const rules = {
-    navTitle: [{ required: true, message: '请输入导航标题', trigger: 'blur' }],
-    navUrl: [{ required: true, message: '请输入导航链接', trigger: 'blur' }]
-  }
-  const formDefault = {
-    id: undefined,
-    navTitle: undefined,
-    navUrl: undefined,
-    navTarget: 1,
-    sort: 1
-  }
-  const formModel = reactive({ ...formDefault })
+const loading = ref(false)
+const emit = defineEmits(['refresh'])
+const formRef = ref()
+const rules = {
+  navTitle: [{ required: true, message: '请输入导航标题', trigger: 'blur' }],
+  navUrl: [{ required: true, message: '请输入导航链接', trigger: 'blur' }]
+}
+const formDefault = {
+  id: undefined,
+  navTitle: undefined,
+  navUrl: undefined,
+  navTarget: 1,
+  sort: 1
+}
+const formModel = reactive({ ...formDefault })
 
-  const onSubmit = async () => {
-    const valid = await formRef.value.validate()
-    if (!valid) return
-    if (loading.value === true) {
-      ElMessage.warning('请勿重复提交')
-      return
-    }
-    loading.value = true
-    try {
-      if (formModel.id) {
-        await SystemApi.getHeaderEdit(formModel)
-      } else {
-        await SystemApi.getHeaderAdd(formModel)
-      }
-      emit('refresh')
-      onClose()
-    } finally {
-      loading.value = false
-    }
+const onSubmit = async () => {
+  const valid = await formRef.value.validate()
+  if (!valid) return
+  if (loading.value === true) {
+    ElMessage.warning('请勿重复提交')
+    return
   }
-  // 打开关闭
-  const visible = ref(false)
-  const onOpen = (item) => {
-    if (item) {
-      Object.assign(formModel, item)
+  loading.value = true
+  try {
+    if (formModel.id) {
+      await SystemApi.getHeaderEdit(formModel)
+    } else {
+      await SystemApi.getHeaderAdd(formModel)
     }
-    visible.value = true
+    emit('refresh')
+    onClose()
+  } finally {
+    loading.value = false
   }
-  const onClose = () => {
-    visible.value = false
-    Object.assign(formModel, formDefault)
+}
+// 打开关闭
+const visible = ref(false)
+const onOpen = (item) => {
+  if (item) {
+    Object.assign(formModel, item)
   }
-  defineExpose({ onOpen }) // 暴露onOnpen方法
+  visible.value = true
+}
+const onClose = () => {
+  visible.value = false
+  Object.assign(formModel, formDefault)
+}
+defineExpose({ onOpen }) // 暴露onOnpen方法
 </script>
 
 <style scoped lang="scss"></style>

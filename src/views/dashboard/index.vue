@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col v-if="hasPermission('stat:data')" >
+    <el-col v-if="hasPermission('stat:data')">
       <StatData />
     </el-col>
   </el-row>
@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-  import { hasPermission } from '@/utils/permission.js'
-  import StatData from './StatData.vue'
-  import StatLogin from './StatLogin.vue'
-  import StatVod from './StatVod.vue'
+import { hasPermission } from '@/utils/permission.js'
+import StatData from './StatData.vue'
+import StatLogin from './StatLogin.vue'
+import StatVod from './StatVod.vue'
 </script>
 
 <style scoped lang="scss"></style>

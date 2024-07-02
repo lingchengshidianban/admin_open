@@ -9,7 +9,7 @@ export default defineConfig({
   telemetry: false,
   server: {
     port: 9528,
-    open: false,
+    open: true,
     proxy: {
       '/gateway': {
         target: 'https://dev-os.roncoos.com/gateway',

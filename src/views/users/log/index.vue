@@ -1,11 +1,6 @@
 <template>
-  <el-form inline :model="query">
-    <el-form-item>
-      <el-button type="primary" @click="handleQuery">查询</el-button>
-      <el-button @click="resetQuery">重置</el-button>
-    </el-form-item>
-  </el-form>
-  <el-table :data="page.list">
+  <el-table :data="page.list" height="100%" border>
+    ">
     <el-table-column label="手机号" prop="mobile" />
     <el-table-column label="登录IP" prop="loginIp" />
     <el-table-column label="登录地址" prop="province">
@@ -32,14 +27,14 @@
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { usersApi } from '@/api/users.js'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import Paging from '@/components/Paging/index.vue'
+import useTable from '@/utils/table.js'
+import { usersApi } from '@/api/users.js'
+import EnumView from '@/components/Enum/View/index.vue'
+import Paging from '@/components/Paging/index.vue'
 
-  const { query, page, resetQuery, handleQuery, handlePage } = useTable({
-    page: usersApi.loginLogPage
-  })
+const { page, handlePage } = useTable({
+  page: usersApi.loginLogPage
+})
 </script>
 
 <style scoped lang="scss"></style>

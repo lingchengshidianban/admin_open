@@ -16,57 +16,57 @@
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import { ElMessage } from 'element-plus'
-  import { courseApi } from '@/api/course.js'
-  import EnumRadio from '@/components/Enum/Radio/index.vue'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import { courseApi } from '@/api/course.js'
+import EnumRadio from '@/components/Enum/Radio/index.vue'
 
-  const visible = ref(false)
-  const emit = defineEmits(['refresh'])
-  const formRef = ref()
-  const coursePrice = ref(0)
-  const rules = {
-    periodName: { required: true, message: '请输入名称', trigger: 'blur' }
-  }
-  const formDefault = {
-    id: undefined,
-    periodName: undefined,
-    periodType: 10,
-    isFree: 0
-  }
+const visible = ref(false)
+const emit = defineEmits(['refresh'])
+const formRef = ref()
+const coursePrice = ref(0)
+const rules = {
+  periodName: { required: true, message: '请输入名称', trigger: 'blur' }
+}
+const formDefault = {
+  id: undefined,
+  periodName: undefined,
+  periodType: 10,
+  isFree: 0
+}
 
-  const formModel = reactive({ ...formDefault })
-  const onClose = () => {
-    visible.value = false
-    Object.assign(formModel, formDefault)
+const formModel = reactive({ ...formDefault })
+const onClose = () => {
+  visible.value = false
+  Object.assign(formModel, formDefault)
+}
+const onOpen = (item) => {
+  coursePrice.value = item.coursePrice
+  if (item) {
+    Object.assign(formModel, item)
   }
-  const onOpen = (item) => {
-    coursePrice.value = item.coursePrice
-    if (item) {
-      Object.assign(formModel, item)
+  visible.value = true
+}
+defineExpose({ onOpen })
+const loading = ref(false)
+const onSubmit = async () => {
+  const valid = await formRef.value.validate()
+  if (!valid) return
+  loading.value = true
+  try {
+    if (formModel.id) {
+      await courseApi.chapterPeriodEdit(formModel)
+      ElMessage.success('修改成功')
+    } else {
+      await courseApi.chapterPeriodSave(formModel)
+      ElMessage.success('添加成功')
     }
-    visible.value = true
+    emit('refresh')
+    onClose()
+  } finally {
+    loading.value = false
   }
-  defineExpose({ onOpen })
-  const loading = ref(false)
-  const onSubmit = async () => {
-    const valid = await formRef.value.validate()
-    if (!valid) return
-    loading.value = true
-    try {
-      if (formModel.id) {
-        await courseApi.chapterPeriodEdit(formModel)
-        ElMessage.success('修改成功')
-      } else {
-        await courseApi.chapterPeriodSave(formModel)
-        ElMessage.success('添加成功')
-      }
-      emit('refresh')
-      onClose()
-    } finally {
-      loading.value = false
-    }
-  }
+}
 </script>
 
 <style scoped lang="scss"></style>

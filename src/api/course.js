@@ -17,6 +17,10 @@ export const courseApi = {
   courseZoneSort: (data) => {
     return req.put('/course/admin/zone/course/sort', data)
   },
+  // 专区课程添加
+  courseZoneSave: (data) => {
+    return req.post('/course/admin/zone/course/save', data)
+  },
   // 专区分页
   zoneList: (params) => {
     return req.post('/course/admin/zone/page', params)

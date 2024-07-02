@@ -11,16 +11,16 @@
 <script setup></script>
 
 <style scoped lang="scss">
-  .el-main {
-    background-color: #f2f3f5;
-    --el-main-padding: 20px 10px 10px;
-    transition: margin-left 0.5s;
+.el-main {
+  background-color: #f2f3f5;
+  --el-main-padding: 20px 10px 10px;
+  transition: margin-left 0.5s;
 
-    .main-container {
-      background-color: #fff;
-      min-height: calc(100vh - 130px);
-      padding: 20px;
-      overflow: hidden;
-    }
+  .main-container {
+    background-color: #fff;
+    min-height: calc(100vh - 130px);
+    padding: 20px;
+    overflow: hidden;
   }
+}
 </style>

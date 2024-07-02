@@ -10,7 +10,7 @@
     <el-form-item>
       <el-button type="primary" @click="handleQuery">查询</el-button>
       <el-button @click="resetQuery">重置</el-button>
-      <el-button type="primary">上传</el-button>
+      <UploadFile v-permission="'resource:save'" :category-id="query.categoryId" :on-bus="onBus" @refresh="handlePage" />
       <el-button v-permission="'resource:edit'" style="margin-left: 10px" :disabled="!ids.length > 0" @click="handleBatchMove()">批量移动</el-button>
       <el-button v-permission="'resource:delete'" style="margin-left: 10px" :disabled="!ids.length > 0" @click="handleBatchDelete()">批量删除</el-button>
     </el-form-item>
@@ -19,7 +19,7 @@
     <Cascader v-model:category-id="query.categoryId" :category-type="2" @refresh="handlePage" />
     <el-table v-loading="page.loading" :data="page.list" row-key="id" class="drag-table" @selection-change="handleSelectionChange">
       <el-table-column type="selection" :width="40" />
-      <el-table-column label="资源名称" :min-width="100" prop="resourceName">
+      <el-table-column label="资源名称" :min-width="120" prop="resourceName">
         <template #default="scope">
           <div style="display: flex">
             <p>{{ scope.row.resourceName }}</p>
@@ -32,19 +32,19 @@
           <el-image v-if="scope.row.resourceType === 4" preview-teleported style="height: 50px; width: auto" :preview-src-list="[scope.row.resourceUrl]" :src="scope.row.resourceUrl" alt="" />
         </template>
       </el-table-column>
-      <el-table-column label="资源类型" props="resourceType">
+      <el-table-column label="资源类型" props="resourceType" :min-width="50">
         <template #default="scope">
           <enum-view :enum-name="'ResourceTypeEnum'" :enum-value="scope.row.resourceType" />
         </template>
       </el-table-column>
-      <el-table-column label="资源大小">
+      <el-table-column label="资源大小" :min-width="80">
         <template #default="scope">
           {{ transformSize(scope.row.resourceSize) }}
           <span v-if="scope.row.resourceType < 3">|{{ formatTime(scope.row.videoLength) }}</span>
           <span v-if="scope.row.resourceType === 3">|{{ scope.row.docPage }}页</span>
         </template>
       </el-table-column>
-      <el-table-column label="资源状态" prop="videoStatus">
+      <el-table-column label="资源状态" prop="videoStatus" :min-width="50">
         <template #default="scope">
           <span v-if="scope.row.resourceType < 3">
             <enum-view :enum-name="'VideoStatusEnum'" :enum-value="scope.row.videoStatus" />
@@ -52,13 +52,13 @@
           <span v-else>成功</span>
         </template>
       </el-table-column>
-      <el-table-column label="平台">
+      <el-table-column label="平台" :min-width="50">
         <template #default="scope">
           <enum-view v-if="scope.row.resourceType < 3" :enum-name="'VodPlatformEnum'" :enum-value="scope.row.vodPlatform"></enum-view>
           <enum-view v-else :enum-name="'StoragePlatformEnum'" :enum-value="scope.row.storagePlatform"></enum-view>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="address">
+      <el-table-column label="操作" prop="address" :min-width="100">
         <template #default="scope">
           <el-button v-permission="'resource:edit'" text type="primary" @click="openFormModal(scope.row)">编辑</el-button>
           <el-divider direction="vertical" />
@@ -80,71 +80,90 @@
   </div>
   <ResourceForm ref="formRef" @refresh="handlePage" />
   <MoveDirectory ref="moveRef" @refresh="handlePage" />
+  <Preview v-if="resource.visible" :visible="resource.visible" :resource-id="resource.resourceId" :resource-name="resource.resourceName" @close="handleClose" />
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { courseApi } from '@/api/course.js'
-  import { ref, onMounted } from 'vue'
-  import { getEnumList } from '@/utils/base.js'
-  import Cascader from '@/components/Cascader/Cascader/index.vue'
-  import { VideoPlay } from '@element-plus/icons-vue'
-  import MoveDirectory from './MoveDirectory.vue'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import ResourceForm from './ResourceForm.vue'
-  import { transformSize, formatTime } from '@/utils/base.js'
-  import { ElMessageBox, ElMessage } from 'element-plus'
+import useTable from '@/utils/table.js'
+import { courseApi } from '@/api/course.js'
+import { ref, onMounted, reactive } from 'vue'
+import { getEnumList } from '@/utils/base.js'
+import Cascader from '@/components/Cascader/Cascader/index.vue'
+import UploadFile from '@/components/Upload/File/index.vue'
+import Preview from '@/components/Preview/index.vue'
+import { VideoPlay } from '@element-plus/icons-vue'
+import MoveDirectory from './MoveDirectory.vue'
+import EnumView from '@/components/Enum/View/index.vue'
+import ResourceForm from './ResourceForm.vue'
+import { transformSize, formatTime } from '@/utils/base.js'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
-  const onBus = ref(false)
-  const tabPanes = ref()
-  onMounted(async () => {
-    onBus.value = true
-    tabPanes.value = await getEnumList('ResourceTypeEnum')
+const onBus = ref(false)
+const tabPanes = ref()
+onMounted(async () => {
+  onBus.value = true
+  tabPanes.value = await getEnumList('ResourceTypeEnum')
+})
+const { query, page, handleQuery, resetQuery, handlePage, handleDelete, handleStatus } = useTable({
+  page: courseApi.resourcePage,
+  delete: courseApi.resourceDelete,
+  status: courseApi.resourceEdit,
+  sort: courseApi.resourceSort
+})
+
+const activeName = ref(0)
+
+function handleTabClick(tab) {
+  activeName.value = tab.props.name
+  query.resourceType = tab.props.name
+  handleQuery()
+}
+
+const ids = ref([])
+const handleSelectionChange = (rows) => {
+  ids.value = []
+  rows.forEach((row) => {
+    ids.value.push(row.id)
   })
-  const { query, page, handleQuery, resetQuery, handlePage, handleDelete, handleStatus } = useTable({
-    page: courseApi.resourcePage,
-    delete: courseApi.resourceDelete,
-    status: courseApi.resourceEdit,
-    sort: courseApi.resourceSort
+}
+
+const resource = reactive({
+  resourceName: '',
+  visible: false,
+  resourceId: ''
+})
+const onPreview = (row) => {
+  resource.resourceId = row.id
+  resource.resourceName = row.resourceName
+  resource.visible = true
+}
+const handleClose = () => {
+  resource.visible = false
+}
+
+// 批量移动
+const moveRef = ref()
+function handleBatchMove() {
+  moveRef.value.onOpen(ids.value)
+}
+// 批量删除
+function handleBatchDelete() {
+  ElMessageBox.confirm('确定要删除吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    courseApi.resourceDelete(ids.value).then((res) => {
+      ElMessage.success(res)
+      handlePage()
+    })
   })
-  const activeName = ref(0)
+}
 
-  function handleTabClick(tab) {
-    activeName.value = tab.props.name
-    query.resourceType = tab.props.name
-    handleQuery()
-  }
-
-  const ids = ref([])
-  const handleSelectionChange = (rows) => {
-    ids.value = []
-    rows.forEach((row) => {
-      ids.value.push(row.id)
-    })
-  }
-  // 批量移动
-  const moveRef = ref()
-  function handleBatchMove() {
-    moveRef.value.onOpen(ids.value)
-  }
-  // 批量删除
-  function handleBatchDelete() {
-    ElMessageBox.confirm('确定要删除吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      courseApi.resourceDelete(ids.value).then((res) => {
-        ElMessage.success(res)
-        handlePage()
-      })
-    })
-  }
-
-  const formRef = ref()
-  const openFormModal = (item) => {
-    formRef.value.onOpen(item)
-  }
+const formRef = ref()
+const openFormModal = (item) => {
+  formRef.value.onOpen(item)
+}
 </script>
 
 <style scoped lang="scss"></style>

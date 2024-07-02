@@ -40,94 +40,98 @@
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  import { ElMessage } from 'element-plus'
-  import SelectLecturer from '@/components/Select/Lecturer/index.vue'
-  import EnumRadio from '@/components/Enum/Radio/index.vue'
-  import Editor from '@/components/Editor/index.vue'
-  import { courseApi } from '@/api/course.js'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import SelectLecturer from '@/components/Select/Lecturer/index.vue'
+import EnumRadio from '@/components/Enum/Radio/index.vue'
+import Editor from '@/components/Editor/index.vue'
+import { courseApi } from '@/api/course.js'
 
-  const formRef = ref(null)
-  const rules = {
-    lecturerId: { required: true, message: '请选择主讲人', trigger: 'change' },
-    periodName: { required: true, message: '请输入课时名称', trigger: 'blur' }
+const formRef = ref(null)
+const rules = {
+  lecturerId: { required: true, message: '请选择主讲人', trigger: 'change' },
+  periodName: { required: true, message: '请输入课时名称', trigger: 'blur' }
+}
+
+const visible = ref(false)
+const lecturer = reactive({
+  visible: false
+})
+const emit = defineEmits(['refresh'])
+
+const formDefault = {
+  id: undefined,
+  periodName: undefined,
+  beginTime: undefined,
+  periodType: 20,
+  liveDuration: 60,
+  liveDelay: 1,
+  liveModel: 1,
+  isFree: 0
+}
+const coursePrice = ref(0)
+const formModel = reactive({ ...formDefault })
+
+const onOpen = (item) => {
+  coursePrice.value = item.coursePrice
+  formModel.courseId = item.courseId
+  formModel.chapterId = item.chapterId
+  if (item.id) {
+    Object.assign(formModel, item.liveViewResp)
+    formModel.id = item.id
+    formModel.liveId = item.liveId
+    formModel.sort = item.sort
+    formModel.isFree = item.isFree
+    formModel.periodName = item.periodName
   }
+  visible.value = true
+}
+defineExpose({ onOpen })
 
-  const visible = ref(false)
-  const lecturer = reactive({
-    visible: false
-  })
-  const emit = defineEmits(['refresh'])
-
-  const formDefault = {
-    id: undefined,
-    periodName: undefined,
-    beginTime: undefined,
-    periodType: 20,
-    liveDuration: 60,
-    liveDelay: 1,
-    liveModel: 1,
-    isFree: 0
+const loading = ref(false)
+const onSubmit = async () => {
+  const isValid = await formRef.value.validate()
+  if (!isValid) {
+    return
   }
-  const coursePrice = ref(0)
-  const formModel = reactive({ ...formDefault })
-
-  const onOpen = (item) => {
-    coursePrice.value = item.coursePrice
-    formModel.courseId = item.courseId
-    formModel.chapterId = item.chapterId
-    if (item.id) {
-      Object.assign(formModel, item.liveViewResp)
-      formModel.id = item.id
-      formModel.liveId = item.liveId
-      formModel.sort = item.sort
-      formModel.isFree = item.isFree
-      formModel.periodName = item.periodName
+  if (loading.value === true) {
+    return ElMessage.success('正在处理...')
+  }
+  loading.value = true
+  try {
+    if (formModel.id) {
+      await courseApi.chapterPeriodEdit(formModel)
+      ElMessage.success('修改成功')
+    } else {
+      await courseApi.chapterPeriodSave(formModel)
+      ElMessage.success('添加成功')
     }
-    visible.value = true
+    emit('refresh')
+    onClose()
+  } finally {
+    loading.value = false
   }
-  defineExpose({ onOpen })
-
-  const loading = ref(false)
-  const onSubmit = async () => {
-    const isValid = await formRef.value.validate()
-    if (!isValid) return
-    if (loading.value === true) return ElMessage.success('正在处理...')
-    loading.value = true
-    try {
-      if (formModel.id) {
-        await courseApi.chapterPeriodEdit(formModel)
-        ElMessage.success('修改成功')
-      } else {
-        await courseApi.chapterPeriodSave(formModel)
-        ElMessage.success('添加成功')
-      }
-      emit('refresh')
-      onClose()
-    } finally {
-      loading.value = false
-    }
-    visible.value = false
+  visible.value = false
+}
+const onClose = () => {
+  visible.value = false
+  Object.assign(formModel, formDefault)
+}
+function lecturerSelect() {
+  lecturer.visible = true
+}
+const handleLecturer = (item) => {
+  lecturer.visible = false
+  if (item) {
+    // 将讲师信息赋值给表单
+    formModel.lecturerId = item.lecturerId
+    formModel.lecturerName = item.lecturerName
   }
-  const onClose = () => {
-    visible.value = false
-    Object.assign(formModel, formDefault)
-  }
-  function lecturerSelect() {
-    lecturer.visible = true
-  }
-  const handleLecturer = (item) => {
-    lecturer.visible = false
-    if (item) {
-      // 将讲师信息赋值给表单
-      formModel.lecturerId = item.lecturerId
-      formModel.lecturerName = item.lecturerName
-    }
-  }
+}
 </script>
 
 <style scoped lang="scss">
-  .mar_sty {
-    margin-right: 5px;
-  }
+.mar_sty {
+  margin-right: 5px;
+}
 </style>

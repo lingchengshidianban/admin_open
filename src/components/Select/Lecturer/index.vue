@@ -23,29 +23,31 @@
       </el-table-column>
     </el-table>
   </el-dialog>
+  <Paging v-model:current-page="page.pageCurrent" v-model:page-size="page.pageSize" :total="page.totalCount" @pagination="handlePage" />
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { usersApi } from '@/api/users.js'
+import useTable from '@/utils/table.js'
+import { usersApi } from '@/api/users.js'
+import Paging from '@/components/Paging/index.vue'
 
-  const props = defineProps({
-    title: {
-      type: String,
-      default: '请选择讲师'
-    }
-  })
-  const emit = defineEmits(['close'])
-  const selectLecturer = (info) => {
-    // 关闭时发送讲师信息
-    emit('close', { lecturerName: info.lecturerName, lecturerId: info.id })
+const props = defineProps({
+  title: {
+    type: String,
+    default: '请选择讲师'
   }
-  const handleClose = () => {
-    emit('close')
-  }
-  const { query, page, handleQuery, resetQuery } = useTable({
-    page: usersApi.teacherPage
-  })
+})
+const emit = defineEmits(['close'])
+const selectLecturer = (info) => {
+  // 关闭时发送讲师信息
+  emit('close', { lecturerName: info.lecturerName, lecturerId: info.id })
+}
+const handleClose = () => {
+  emit('close')
+}
+const { query, page, handleQuery, resetQuery, handlePage } = useTable({
+  page: usersApi.teacherPage
+})
 </script>
 
 <style scoped lang="scss"></style>

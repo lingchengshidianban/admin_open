@@ -18,9 +18,10 @@
             <span>{{ scope.row.courseViewResp.courseName }}</span>
             <br />
             <span v-if="scope.row.courseViewResp.coursePrice === 0">免费</span>
-            <span v-else
-              >￥{{ scope.row.courseViewResp.coursePrice }}<span style="text-decoration: line-through">{{ scope.row.courseViewResp.rulingPrice }}</span></span
-            >
+            <span v-else>
+              ￥{{ scope.row.courseViewResp.coursePrice }}
+              <span style="text-decoration: line-through">{{ scope.row.courseViewResp.rulingPrice }}</span>
+            </span>
           </div>
         </div>
       </template>
@@ -43,29 +44,41 @@
       </template>
     </el-table-column>
   </el-table>
-  <select-course />
+  <select-course :visible="courseRef.visible" @close="courseModel" />
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { courseApi } from '@/api/course.js'
-  import { useRoute } from 'vue-router'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import SelectCourse from '@/components/Select/course/index.vue'
-  import { ref } from 'vue'
-  const route = useRoute()
+import useTable from '@/utils/table.js'
+import { courseApi } from '@/api/course.js'
+import { ElMessage } from 'element-plus'
+import { useRoute } from 'vue-router'
+import EnumView from '@/components/Enum/View/index.vue'
+import SelectCourse from '@/components/Select/course/index.vue'
+import { ref } from 'vue'
+const route = useRoute()
 
-  const openFormModel = () => {}
+const courseRef = ref({
+  visible: false
+})
+const openFormModel = () => {
+  courseRef.value.visible = true
+}
+const courseModel = async (item) => {
+  courseRef.value.visible = false
+  await courseApi.courseZoneSave({ courseId: item.id, zoneId: route.query.zoneId, sort: 1 })
+  ElMessage.success('添加成功')
+  handleQuery()
+}
 
-  const { query, page, handleDelete, handleStatus, handleQuery, resetQuery } = useTable(
-    {
-      page: courseApi.courseZoneList,
-      delete: courseApi.courseZoneDelete,
-      status: courseApi.courseZoneEdit,
-      sort: courseApi.courseZoneSort
-    },
-    {
-      zoneId: route.query.zoneId
-    }
-  )
+const { query, page, handleDelete, handleStatus, handleQuery, resetQuery } = useTable(
+  {
+    page: courseApi.courseZoneList,
+    delete: courseApi.courseZoneDelete,
+    status: courseApi.courseZoneEdit,
+    sort: courseApi.courseZoneSort
+  },
+  {
+    zoneId: route.query.zoneId
+  }
+)
 </script>

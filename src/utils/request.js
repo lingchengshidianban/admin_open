@@ -18,7 +18,7 @@ request.interceptors.request.use(
     // removePending(config, true)
     const token = getToken()
     if (token) {
-      config.headers['token'] = token
+      config.headers.token = token
     }
     config.cancelToken = new cancelToken((c) => {
       // 这里的ajax标识用：请求地址&请求方式拼接的字符串
@@ -136,5 +136,24 @@ const createHttp = {
     })
   }
 }
-
 export default createHttp
+
+// 上传文件
+export const upload = (url, data, fileName, cb, cancelFun) => {
+  const formData = new FormData()
+  formData.append(fileName, data)
+  const config = {
+    onUploadProgress: (progressEvent) => {
+      const percent = Number(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2))
+      if (cb) {
+        cb(percent)
+      }
+    }
+  }
+  if (cancelFun) {
+    config.cancelToken = new axios.CancelToken(function excutor(c) {
+      cancelFun.cancel = c
+    })
+  }
+  return request.post(url, formData, config)
+}

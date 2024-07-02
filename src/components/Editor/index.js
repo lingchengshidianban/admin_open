@@ -10,6 +10,7 @@ const MenusList = [
 ]
 
 const registerMenu = function (editor, toolbarConfig) {
+  // 获取到所有菜单键
   const allRegisterMenu = editor.getAllMenuKeys()
   let keys = []
   for (let item of MenusList) {

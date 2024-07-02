@@ -16,56 +16,58 @@
 </template>
 
 <script setup>
-  import { ElMessage } from 'element-plus'
-  import { ref, reactive } from 'vue'
-  import { courseApi } from '@/api/course.js'
-  const formRef = ref()
-  // 校验
-  const emit = defineEmits(['refresh'])
-  const rules = {
-    resourceName: [{ required: true, message: '请输入资源名称', trigger: 'blur' }]
+import { ElMessage } from 'element-plus'
+import { ref, reactive } from 'vue'
+import { courseApi } from '@/api/course.js'
+const formRef = ref()
+// 校验
+const emit = defineEmits(['refresh'])
+const rules = {
+  resourceName: [{ required: true, message: '请输入资源名称', trigger: 'blur' }]
+}
+const formDefault = {
+  id: undefined,
+  resourceName: undefined,
+  sort: 1
+}
+const formModel = reactive({ ...formDefault })
+const visible = ref(false)
+const loading = ref(false)
+const onSubmit = async () => {
+  const res = formRef.value.validate()
+  if (!res) {
+    return
   }
-  const formDefault = {
-    id: undefined,
-    resourceName: undefined,
-    sort: 1
+  loading.value = true
+  if (loading.value === true) {
+    ElMessage.success('...正在提交中,请稍等')
   }
-  const formModel = reactive({ ...formDefault })
-  const visible = ref(false)
-  const loading = ref(false)
-  const onSubmit = async () => {
-    const res = formRef.value.validate()
-    if (!res) return
-    loading.value = true
-    if (loading.value === true) {
-      ElMessage.success('...正在提交中,请稍等')
+  try {
+    if (formModel.id) {
+      await courseApi.resourceEdit(formModel)
+      ElMessage.success('修改成功')
+    } else {
+      await courseApi.resourceSave(formModel)
+      ElMessage.success('新增成功')
     }
-    try {
-      if (formModel.id) {
-        await courseApi.resourceEdit(formModel)
-        ElMessage.success('修改成功')
-      } else {
-        await courseApi.resourceSave(formModel)
-        ElMessage.success('新增成功')
-      }
-      emit('refresh')
-      onClose()
-    } finally {
-      loading.value = false
-    }
+    emit('refresh')
+    onClose()
+  } finally {
+    loading.value = false
   }
-  const onOpen = (row) => {
-    if (row) {
-      Object.assign(formModel, row)
-    }
-    visible.value = true
+}
+const onOpen = (row) => {
+  if (row) {
+    Object.assign(formModel, row)
   }
-  // 暴露onOpen
-  defineExpose({ onOpen })
-  const onClose = () => {
-    Object.assign(formModel, formDefault)
-    visible.value = false
-  }
+  visible.value = true
+}
+// 暴露onOpen
+defineExpose({ onOpen })
+const onClose = () => {
+  Object.assign(formModel, formDefault)
+  visible.value = false
+}
 </script>
 
 <style scoped lang="scss"></style>

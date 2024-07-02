@@ -20,8 +20,7 @@ export default function useTable(apis, paras = {}) {
         const res = await apis.page({
           pageCurrent: page.pageCurrent,
           pageSize: page.pageSize,
-          ...query,
-          ...paras
+          ...query
         })
         if (res) {
           page.list = res.list || res || []
@@ -37,7 +36,9 @@ export default function useTable(apis, paras = {}) {
       }
     }
   }
-  const query = reactive({})
+  const query = reactive({
+    ...paras
+  })
   // 查询
   const handleQuery = () => {
     page.pageCurrent = 1
@@ -45,7 +46,7 @@ export default function useTable(apis, paras = {}) {
   }
   // 重置
   const resetQuery = () => {
-    for (let i in query) {
+    for (const i in query) {
       query[i] = ''
     }
     handleQuery()

@@ -20,7 +20,8 @@
           <div>
             <div>{{ scope.row.courseName }}</div>
             <div>
-              {{ scope.row.rulingPrice }}<span style="text-decoration: line-through; margin-left: 10px">{{ scope.row.coursePrice }}</span>
+              {{ scope.row.rulingPrice }}
+              <span style="text-decoration: line-through; margin-left: 10px">{{ scope.row.coursePrice }}</span>
             </div>
           </div>
         </div>
@@ -34,9 +35,10 @@
     </el-table-column>
     <el-table-column label="销售量/学习人数" :min-width="50">
       <template #default="scope">
-        <span
-          >{{ scope.row.countBuy }} / <span>{{ scope.row.countStudy }}</span></span
-        >
+        <span>
+          {{ scope.row.countBuy }} /
+          <span>{{ scope.row.countStudy }}</span>
+        </span>
       </template>
     </el-table-column>
     <el-table-column label="售卖" :min-width="50">
@@ -79,45 +81,45 @@
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { ElMessageBox } from 'element-plus'
-  import { courseApi } from '@/api/course.js'
-  import { useRouter } from 'vue-router'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import Paging from '@/components/Paging/index.vue'
-  const router = useRouter()
+import useTable from '@/utils/table.js'
+import { ElMessageBox } from 'element-plus'
+import { courseApi } from '@/api/course.js'
+import { useRouter } from 'vue-router'
+import EnumView from '@/components/Enum/View/index.vue'
+import Paging from '@/components/Paging/index.vue'
+const router = useRouter()
 
-  // 数据管理
-  const handleData = (row) => {
-    router.push({ path: '/Course/record', query: { courseId: row.id } })
-  }
-  // 章节管理
-  const toCourseChapter = (row) => {
-    router.push({ path: '/Course/chapter', query: { courseId: row.id } })
-  }
+// 数据管理
+const handleData = (row) => {
+  router.push({ path: '/Course/record', query: { courseId: row.id } })
+}
+// 章节管理
+const toCourseChapter = (row) => {
+  router.push({ path: '/Course/chapter', query: { courseId: row.id } })
+}
 
-  //添加
-  const toCourseAdd = () => {
-    router.push({ path: '/Course/update' })
-  }
-  // 编辑
-  const toCourseUpdate = (row) => {
-    router.push({ path: '/Course/update', query: { courseId: row.id } })
-  }
-  const { page, query, handleQuery, resetQuery, handleDelete, handleStatus } = useTable({
-    page: courseApi.coursePage,
-    delete: courseApi.courseDelete,
-    status: courseApi.courseEdit,
-    sort: courseApi.courseSort
+//添加
+const toCourseAdd = () => {
+  router.push({ path: '/Course/update' })
+}
+// 编辑
+const toCourseUpdate = (row) => {
+  router.push({ path: '/Course/update', query: { courseId: row.id } })
+}
+const { page, query, handleQuery, resetQuery, handleDelete, handleStatus, handlePage } = useTable({
+  page: courseApi.coursePage,
+  delete: courseApi.courseDelete,
+  status: courseApi.courseEdit,
+  sort: courseApi.courseSort
+})
+const handleEs = () => {
+  ElMessageBox.confirm('将课程信息同步到ES,用于吗，门户搜索', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  }).then(() => {
+    courseApi.courseEs()
   })
-  const handleEs = () => {
-    ElMessageBox.confirm('将课程信息同步到ES,用于吗，门户搜索', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消'
-    }).then(() => {
-      courseApi.courseEs()
-    })
-  }
+}
 </script>
 
 <style scoped lang="scss"></style>

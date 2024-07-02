@@ -21,9 +21,10 @@
             {{ scope.row.courseViewVO.courseName }}
             <br />
             <span v-if="scope.row.courseViewVO.isFree === 1">免费</span>
-            <span v-if="scope.row.courseViewVO.isFree === 0"
-              >￥{{ scope.row.courseViewVO.coursePrice }}<span style="text-decoration: line-through; margin-left: 10px">￥{{ scope.row.courseViewVO.rulingPrice }}</span></span
-            >
+            <span v-if="scope.row.courseViewVO.isFree === 0">
+              ￥{{ scope.row.courseViewVO.coursePrice }}
+              <span style="text-decoration: line-through; margin-left: 10px">￥{{ scope.row.courseViewVO.rulingPrice }}</span>
+            </span>
           </div>
         </div>
       </template>
@@ -59,24 +60,24 @@
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import { usersApi } from '@/api/users.js'
-  import { ref } from 'vue'
-  import Paging from '@/components/Paging/index.vue'
+import useTable from '@/utils/table.js'
+import EnumView from '@/components/Enum/View/index.vue'
+import { usersApi } from '@/api/users.js'
+import { ref } from 'vue'
+import Paging from '@/components/Paging/index.vue'
 
-  const formRef = ref()
-  function openMode(row) {
-    formRef.value.onOpen(row)
-  }
+const formRef = ref()
+function openMode(row) {
+  formRef.value.onOpen(row)
+}
 
-  const { page, query, handleQuery } = useTable({
-    page: usersApi.orderInfoPage
-  })
+const { page, query, handleQuery, handlePage } = useTable({
+  page: usersApi.orderInfoPage
+})
 </script>
 
 <style scoped lang="scss">
-  .app-container {
-    display: flex;
-  }
+.app-container {
+  display: flex;
+}
 </style>

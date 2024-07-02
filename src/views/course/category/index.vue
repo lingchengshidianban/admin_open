@@ -46,21 +46,21 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import CategoryForm from './CategoryForm.vue'
-  import useTable from '@/utils/table.js'
-  import { courseApi } from '@/api/course.js'
+import { ref } from 'vue'
+import EnumView from '@/components/Enum/View/index.vue'
+import CategoryForm from './CategoryForm.vue'
+import useTable from '@/utils/table.js'
+import { courseApi } from '@/api/course.js'
 
-  const formModel = ref(false)
-  const openFormModel = (item = null, parentId = '') => {
-    formModel.value.onOpen(item, parentId)
-  }
-  const { page, query, handleStatus, handlePage, resetQuery, handleDelete } = useTable({
-    page: courseApi.categoryList,
-    status: courseApi.categoryEdit,
-    delete: courseApi.categoryDelete
-  })
+const formModel = ref(false)
+const openFormModel = (item = null, parentId = '') => {
+  formModel.value.onOpen(item, parentId)
+}
+const { page, query, handleStatus, handlePage, resetQuery, handleDelete } = useTable({
+  page: courseApi.categoryList,
+  status: courseApi.categoryEdit,
+  delete: courseApi.categoryDelete
+})
 </script>
 
 <style scoped lang="scss"></style>
