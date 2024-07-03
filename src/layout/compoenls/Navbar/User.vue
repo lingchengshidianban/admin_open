@@ -11,7 +11,7 @@
     </el-link>
     <el-dropdown trigger="click">
       <div class="user_wrapper">
-        <img src="@/assets/images/head.gif" alt="" style="height: 40px; width: auto; border-radius: 50%" />
+        <img src="@/assets/images/head.gif" alt="" class="user_avatar" />
       </div>
       <template #dropdown>
         <el-dropdown-menu>
@@ -83,6 +83,24 @@ const toggleFullScreen = () => {
   transition: all 0.2s;
   &:hover {
     transform: scale(1.1);
+  }
+}
+.user_avatar {
+  height: 40px;
+  width: auto;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+  &:hover {
+    transform: rotate(360deg);
+    animation: spic 0.1s linear infinite;
+  }
+}
+@keyframes spic {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
