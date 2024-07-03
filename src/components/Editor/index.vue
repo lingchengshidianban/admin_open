@@ -63,5 +63,3 @@ const handleCallback = (val) => {
   }
 }
 </script>
-
-<style scoped lang="scss"></style>
