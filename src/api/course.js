@@ -33,6 +33,14 @@ export const courseApi = {
   zoneSort: (data) => {
     return req.put('/course/admin/zone/sort', data)
   },
+  // 专区修改
+  zoneEdit: (data) => {
+    return req.put('/course/admin/zone/edit', data)
+  },
+  // 专区添加
+  zoneSave: (data) => {
+    return req.post('/course/admin/zone/save', data)
+  },
   // 课程分页
   coursePage: (params, pageSize = 20, pageCurrent = 1) => {
     return req.post('/course/admin/course/page', { pageCurrent, pageSize, ...params })
