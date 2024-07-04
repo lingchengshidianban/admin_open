@@ -9,7 +9,7 @@
       <el-input v-model="formModel.courseName" maxlength="125" placeholder="请输入课程名称" show-word-limit />
     </el-form-item>
     <el-form-item label="讲师" prop="lecturerId">
-      <div style="display: flex">
+      <div style="display: flex; gap: 15px">
         <el-input v-model="formModel.lecturerName" placeholder="请输入讲师名称" disabled />
         <el-button type="primary" @click="lecturerSelect">选择讲师</el-button>
       </div>

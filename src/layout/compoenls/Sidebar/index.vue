@@ -44,6 +44,8 @@ const subMenuList = ref()
 const showMenuList = ref([])
 const hoverMenuId = ref()
 const showSubMenuId = ref()
+
+// 监听路由变化
 watchEffect(() => {
   showSubMenuId.value = route.name
   const mapList = useUserStore().getBreadcrumbMap.get(showSubMenuId.value)

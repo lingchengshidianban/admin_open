@@ -23,6 +23,7 @@ import User from '@/layout/compoenls/Navbar/User.vue'
   background-color: #fff;
   border-bottom: 1px solid #ebeef5;
   display: flex;
+
   .info {
     padding: 0 20px;
     display: flex;

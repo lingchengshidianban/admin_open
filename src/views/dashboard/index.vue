@@ -18,5 +18,4 @@ import StatData from './StatData.vue'
 import StatLogin from './StatLogin.vue'
 import StatVod from './StatVod.vue'
 </script>
-
 <style scoped lang="scss"></style>
