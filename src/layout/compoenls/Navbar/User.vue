@@ -51,8 +51,8 @@ const handelLogout = () => {
     await router.push({ path: PATH.URL_LOGIN })
   })
 }
-// 全屏
 
+// 全屏
 const isFullscreen = ref(false)
 
 const handleFullscreenChange = () => {

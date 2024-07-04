@@ -189,28 +189,8 @@ export const courseApi = {
   chapterPeriodSave: (data) => {
     return req.post('/course/admin/course/chapter/period/save', data)
   },
-  // 直播分页
-  livePage: (params, pageSize = 20, pageCurrent = 1) => {
-    return req.post('/course/admin/live/page', { pageCurrent, pageSize, ...params })
-  },
-  //直播删除
-  liveDelete: (data) => {
-    return req.delete('/course/admin/live/delete?id=' + data.id)
-  },
   // 讲师开播地址
   liveUrl: (data) => {
-    return req.get('/course/admin/live/broadcast?id=' + data.id)
-  },
-  // 直播修改
-  liveEdit: (data) => {
-    return req.put('/course/admin/live/edit', data)
-  },
-  // 直播添加
-  liveSave: (data) => {
-    return req.post('/course/admin/live/save', data)
-  },
-  // 直播查看
-  liveView: (data) => {
-    return req.get('/course/admin/live/view?id=' + data.id)
+    return req.post('/course/admin/live/broadcast', data)
   }
 }

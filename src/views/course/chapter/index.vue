@@ -142,18 +142,6 @@ const openFormPeriodModal = (row) => {
   editForm.value.onOpen(row)
 }
 
-const broadcasting = (row) => {
-  ElMessageBox.confirm('确定要直播吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    courseApi.chapterPeriodBroadcasting({ id: row.id })
-    ElMessage.success('开启成功')
-    handleChapterList()
-  })
-}
-
 const LiveFormRef = ref()
 
 const editLiveForm = (row) => {
@@ -161,6 +149,17 @@ const editLiveForm = (row) => {
   row.chapterId = currentChapterInfo.value.id
   row.coursePrice = courseViewRef.value.coursePrice
   LiveFormRef.value.onOpen(row)
+}
+const broadcasting = (row) => {
+  ElMessageBox.confirm('确定要直播吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    courseApi.liveUrl({ id: row.liveId, courseId: currentChapterInfo.value.id }).then((res) => {
+      window.open(res)
+    })
+  })
 }
 
 // 添加资源
