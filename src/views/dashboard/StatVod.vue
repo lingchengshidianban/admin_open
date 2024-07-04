@@ -2,15 +2,26 @@
   <el-card style="margin-top: 20px">
     <template #header>视频云使用情况</template>
     <div class="cache_pie">
-      <el-skeleton :loading="props.loading" :count="7" :animated="true">
-        <template #template>
-          <el-skeleton-item :variant="'text'" style="height: 16px" />
-        </template>
-        <template #default>
-          <div id="cachePieTwo" ref="pieOneRef" class="axis"></div>
-          <div id="cachePieOne" ref="pieTwoRef" class="axis"></div>
-        </template>
-      </el-skeleton>
+      <div class="cache_layout">
+        <el-skeleton :loading="props.loading" style="width: 90%" :count="7" :animated="true">
+          <template #template>
+            <el-skeleton-item :variant="'text'" style="height: 16px" />
+          </template>
+          <template #default>
+            <div id="cachePieTwo" ref="pieOneRef" class="axis"></div>
+          </template>
+        </el-skeleton>
+      </div>
+      <div class="cache_layout">
+        <el-skeleton :loading="props.loading" :count="7" style="width: 90%" :animated="true">
+          <template #template>
+            <el-skeleton-item :variant="'text'" style="height: 16px" />
+          </template>
+          <template #default>
+            <div id="cachePieOne" ref="pieTwoRef" class="axis"></div>
+          </template>
+        </el-skeleton>
+      </div>
     </div>
   </el-card>
 </template>
@@ -178,10 +189,14 @@ const initChartTwo = (data) => {
   justify-content: center;
   flex-wrap: wrap;
 
-  .axis {
-    width: 45%;
-    height: 280px;
-    display: inline-block;
+  .cache_layout {
+    width: 50%;
+    text-align: center;
+    .axis {
+      width: 45%;
+      height: 280px;
+      display: inline-block;
+    }
   }
 }
 </style>
