@@ -16,7 +16,12 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
-            <div>{{ realName }}</div>
+            <div @click="handleInfo">{{ realName }}</div>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <router-link to="/">
+              <div>首页</div>
+            </router-link>
           </el-dropdown-item>
           <el-dropdown-item>
             <div @click="handelLogout">退出登录</div>
@@ -50,6 +55,11 @@ const handelLogout = () => {
     useUserStore().logout()
     await router.push({ path: PATH.URL_LOGIN })
   })
+}
+
+// 管理员信息
+const handleInfo = () => {
+  router.push({ path: '/users/info' })
 }
 
 // 全屏

@@ -56,20 +56,20 @@
 </template>
 
 <script setup>
-  import useTable from '@/utils/table.js'
-  import { usersApi } from '@/api/users.js'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import { useRouter } from 'vue-router'
-  const router = useRouter()
+import useTable from '@/utils/table.js'
+import { usersApi } from '@/api/users.js'
+import EnumView from '@/components/Enum/View/index.vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-  const handleData = (row) => {
-    router.push({ path: '/users/record', query: { userId: row.id } })
-  }
+const handleData = (row) => {
+  router.push({ path: '/users/record', query: { userId: row.id } })
+}
 
-  const { query, page, handleStatus, handleQuery, resetQuery } = useTable({
-    page: usersApi.userPage,
-    status: usersApi.userEdit
-  })
+const { query, page, handleStatus, handleQuery, resetQuery } = useTable({
+  page: usersApi.userPage,
+  status: usersApi.userEdit
+})
 </script>
 
 <style scoped lang="scss"></style>

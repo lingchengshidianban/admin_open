@@ -1,23 +1,46 @@
 <template>
   <el-card style="margin-top: 20px">
     <template #header>最近14天人数统计</template>
-    <div id="axis" style="height: 300px; margin: 0 auto; text-align: center"></div>
+    <el-skeleton :count="7" :loading="props.loading" :animated="true">
+      <template #template>
+        <el-skeleton-item style="height: 16px" />
+      </template>
+      <template #default>
+        <!--       <template #default> 不会被dom渲染到-->
+        <!--        这里不能用id，因为getElementById获取不到-->
+        <div ref="axis" style="height: 300px; margin: 0 auto; text-align: center"></div>
+      </template>
+    </el-skeleton>
   </el-card>
 </template>
 
 <script setup>
 import * as echarts from 'echarts'
 import { statApi } from '@/api/dashboard.js'
-import { onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
-let myChart
-onMounted(() => {
-  if (!myChart) {
-    myChart = echarts.init(document.getElementById('axis'))
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: true
   }
-  option()
 })
+
+const axis = ref()
+watch(
+  axis,
+  (newVal) => {
+    if (newVal) {
+      option()
+    }
+  },
+  {
+    immediate: true
+  }
+)
+
 const option = async () => {
+  let myChart = echarts.init(axis.value)
   const data = await statApi.login()
   const option = {
     tooltip: {
@@ -50,8 +73,6 @@ const option = async () => {
       }
     ]
   }
-  myChart?.setOption(option)
+  myChart.setOption(option)
 }
 </script>
-
-<style scoped lang="scss"></style>

@@ -2,36 +2,45 @@
   <el-card style="margin-top: 20px">
     <template #header>视频云使用情况</template>
     <div class="cache_pie">
-      <div id="cachePieTwo" ref="pieOneRef" class="axis"></div>
-      <div id="cachePieOne" ref="pieTwoRef" class="axis"></div>
+      <el-skeleton :loading="props.loading" :count="7" :animated="true">
+        <template #template>
+          <el-skeleton-item :variant="'text'" style="height: 16px" />
+        </template>
+        <template #default>
+          <div id="cachePieTwo" ref="pieOneRef" class="axis"></div>
+          <div id="cachePieOne" ref="pieTwoRef" class="axis"></div>
+        </template>
+      </el-skeleton>
     </div>
   </el-card>
 </template>
 
 <script setup>
 import * as echarts from 'echarts'
-import { onMounted, ref, reactive } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { statApi } from '@/api/dashboard'
 
-const chart = reactive({
-  cachePieTwo: null,
-  cachePieOne: null
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  }
 })
+
 const pieOneRef = ref()
 const pieTwoRef = ref()
-onMounted(() => {
-  if (!chart.cachePieTwo) {
-    chart.cachePieTwo = echarts.init(pieOneRef.value)
+
+watch(pieOneRef, (newVal) => {
+  if (newVal) {
+    statApi.vod().then((res) => {
+      initChartOne(res)
+      initChartTwo(res)
+    })
   }
-  if (!chart.cachePieOne) {
-    chart.cachePieOne = echarts.init(pieTwoRef.value)
-  }
-  statApi.vod().then((res) => {
-    initChartOne(res)
-    initChartTwo(res)
-  })
 })
+onMounted(() => {})
 const initChartOne = (data) => {
+  let cachePieTwo = echarts.init(pieOneRef.value)
   const totalFlow = data.totalFlow
   const usedFlow = data.usedFlow ? data.usedFlow.toFixed(2) : 0
   const surplusFlow = (totalFlow - usedFlow).toFixed(2)
@@ -94,9 +103,10 @@ const initChartOne = (data) => {
       }
     ]
   }
-  chart.cachePieTwo?.setOption(option1)
+  cachePieTwo?.setOption(option1)
 }
 const initChartTwo = (data) => {
+  let cachePieOne = echarts.init(pieTwoRef.value)
   const totalSpace = data.totalSpace
   const usedSpace = data.usedSpace ? data.usedSpace.toFixed(2) : 0
   const surplusSpace = (totalSpace - usedSpace).toFixed(2)
@@ -158,7 +168,7 @@ const initChartTwo = (data) => {
       }
     ]
   }
-  chart.cachePieOne?.setOption(option2)
+  cachePieOne?.setOption(option2)
 }
 </script>
 
