@@ -59,7 +59,7 @@ const handelLogout = () => {
 
 // 管理员信息
 const handleInfo = () => {
-  router.push({ path: '/users/info' })
+  ElMessage.error('开发中...')
 }
 
 // 全屏

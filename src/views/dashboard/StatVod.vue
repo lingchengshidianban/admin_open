@@ -41,14 +41,20 @@ const props = defineProps({
 const pieOneRef = ref()
 const pieTwoRef = ref()
 
-watch(pieOneRef, (newVal) => {
-  if (newVal) {
-    statApi.vod().then((res) => {
-      initChartOne(res)
-      initChartTwo(res)
-    })
+watch(
+  pieOneRef,
+  (newVal) => {
+    if (newVal) {
+      statApi.vod().then((res) => {
+        initChartOne(res)
+        initChartTwo(res)
+      })
+    }
+  },
+  {
+    immediate: true
   }
-})
+)
 onMounted(() => {})
 const initChartOne = (data) => {
   let cachePieTwo = echarts.init(pieOneRef.value)
