@@ -7,8 +7,12 @@
       <el-form-item>
         <el-input v-model="query.mobile" placeholder="根据手机号码搜索" prefix-icon="search"></el-input>
       </el-form-item>
+      <el-form-item prop="orderStatus">
+        <enum-select v-model="query.orderStatus" :enum-name="'OrderStatusEnum'" placeholder="订单状态" />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery()">查询</el-button>
+        <el-button @click="resetQuery()">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -36,12 +40,12 @@
         <span>￥{{ scope.row.coursePrice }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="订单状态" prop="status" min-width="50">
+    <el-table-column label="订单状态" prop="orderStatus" min-width="50">
       <template #default="scope">
-        {{ scope.row.status === 1 ? '未支付' : '支付成功' }}
+        <EnumView :enum-name="'OrderStatusEnum'" :enum-value="scope.row.orderStatus" />
       </template>
     </el-table-column>
-    <el-table-column label="客户备注" prop="remark" min-width="50"></el-table-column>
+    <el-table-column label="客户备注" prop="remark" min-width="50" />
     <el-table-column label="支付方式/时间" min-width="80">
       <template #default="scope">
         <enum-view :enum-name="'PayTypeEnum'" :enum-value="scope.row.payType" />
@@ -65,13 +69,14 @@ import EnumView from '@/components/Enum/View/index.vue'
 import { usersApi } from '@/api/users.js'
 import { ref } from 'vue'
 import Paging from '@/components/Paging/index.vue'
+import EnumSelect from '@/components/Enum/Select/index.vue'
 
 const formRef = ref()
 function openMode(row) {
   formRef.value.onOpen(row)
 }
 
-const { page, query, handleQuery, handlePage } = useTable({
+const { page, query, handleQuery, handlePage, resetQuery } = useTable({
   page: usersApi.orderInfoPage
 })
 </script>

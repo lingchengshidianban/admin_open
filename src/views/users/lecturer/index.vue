@@ -1,6 +1,6 @@
 <template>
   <el-form :model="query" inline>
-    <el-form-item> <el-input v-model="query.lecturerName" /> </el-form-item>
+    <el-form-item><el-input v-model="query.lecturerName" /></el-form-item>
     <el-form-item>
       <el-button type="primary" @click="handleQuery">查询</el-button>
       <el-button @click="resetQuery">重置</el-button>
@@ -25,7 +25,7 @@
         <EnumView :enum-value="scope.row.statusId" :enum-name="'StatusIdEnum'" />
       </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作" align="center">
       <template #default="scope">
         <el-button v-permission="'lecturer:edit'" type="primary" text @click="onOpenForm(scope.row)">编辑</el-button>
         <el-divider direction="vertical" />
@@ -50,33 +50,33 @@
 </template>
 
 <script setup>
-  import { usersApi } from '@/api/users.js'
-  import { ref } from 'vue'
-  import useTable from '@/utils/table.js'
-  import { ElMessageBox } from 'element-plus'
-  import EnumView from '@/components/Enum/View/index.vue'
-  import LecturerForm from './LecturerForm.vue'
+import { usersApi } from '@/api/users.js'
+import { ref } from 'vue'
+import useTable from '@/utils/table.js'
+import { ElMessageBox } from 'element-plus'
+import EnumView from '@/components/Enum/View/index.vue'
+import LecturerForm from './LecturerForm.vue'
 
-  const handleES = async () => {
-    ElMessageBox.confirm('是否同步ES?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(async () => {
-      await usersApi.teacherEsSync()
-    })
-  }
-  const formRef = ref()
-  const onOpenForm = (row) => {
-    formRef.value.onOpen(row)
-  }
-
-  const { query, page, handleQuery, resetQuery, handleDelete, handlePage, handleStatus } = useTable({
-    page: usersApi.teacherPage,
-    delete: usersApi.teacherDelete,
-    status: usersApi.teacherUpdate,
-    sort: usersApi.teacherSort
+const handleES = async () => {
+  ElMessageBox.confirm('是否同步ES?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    await usersApi.teacherEsSync()
   })
+}
+const formRef = ref()
+const onOpenForm = (row) => {
+  formRef.value.onOpen(row)
+}
+
+const { query, page, handleQuery, resetQuery, handleDelete, handlePage, handleStatus } = useTable({
+  page: usersApi.teacherPage,
+  delete: usersApi.teacherDelete,
+  status: usersApi.teacherUpdate,
+  sort: usersApi.teacherSort
+})
 </script>
 
 <style scoped lang="scss"></style>

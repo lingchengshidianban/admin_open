@@ -5,29 +5,29 @@
 </template>
 
 <script setup>
-  import { toRefs, watch, onMounted, ref } from 'vue'
-  import { getEnumList } from '@/utils/base.js'
+import { toRefs, watch, onMounted, ref } from 'vue'
+import { getEnumList } from '@/utils/base.js'
 
-  const props = defineProps({
-    modelValue: { type: Number, default: undefined },
-    enumName: { type: String, default: '' },
-    title: { type: String, default: '请选择' }
-  })
+const props = defineProps({
+  modelValue: { type: Number, default: undefined },
+  enumName: { type: String, default: '' },
+  title: { type: String, default: '请选择' }
+})
 
-  const { modelValue, title } = toRefs(props)
+const { modelValue, title } = toRefs(props)
 
-  const enumVal = ref()
-  watch(modelValue, (newValue) => {
-    enumVal.value = newValue
-  })
-  const emit = defineEmits(['update:modelValue'])
-  const handleChange = (item) => {
-    emit('update:modelValue', item)
-  }
-  const enums = ref([])
-  onMounted(async () => {
-    enums.value = await getEnumList(props.enumName)
-  })
+const enumVal = ref()
+watch(modelValue, (newValue) => {
+  enumVal.value = newValue
+})
+const emit = defineEmits(['update:modelValue'])
+const handleChange = (item) => {
+  emit('update:modelValue', item)
+}
+const enums = ref([])
+onMounted(async () => {
+  enums.value = await getEnumList(props.enumName)
+})
 </script>
 
 <style scoped lang="scss"></style>
